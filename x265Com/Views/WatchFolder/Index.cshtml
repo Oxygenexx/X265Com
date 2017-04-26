@@ -1,0 +1,16 @@
+﻿@model x265Com.Models.WatchFolderModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>WatchFolderIndex</h2>
+<div class="jumbotron">
+    <h1>@Model.FolderName</h1>
+    
+    @foreach (x265Com.Models.FileModel _File in Model.FileModels)
+    {
+        <p> @_File.FileName @_File.FileLength </p>
+    }
+ 
+</div>
+

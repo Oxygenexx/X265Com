@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace x265Com.ScriptCS
+﻿namespace x265Com.ScriptCS
 {
     public class ConversionInfo
     {
