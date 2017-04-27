@@ -17,18 +17,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
-                <a href="http://www.ina.fr/">
-                    <img src="/Content/Logo_inaRR.jpg" alt="logo-ina" style="width:50px;height:50px;border:0;">
-                </a>
-                @Html.ActionLink("Conversion", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })            
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">                    
+                <ul class="nav navbar-nav">  
+                    
+                    <li>@Html.ActionLink("Watch Folder", "Index", "WatchFolder", new { area = "" }, new { @class = "navbar-brand" }) </li>                 
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
+                <div class="nav navbar-nav navbar-right">
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -36,7 +39,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - x265Com By INA</p>
+            <p>&copy; @DateTime.Now.Year - x265Com By Mauraud & Rittié</p>
         </footer>
     </div>
 

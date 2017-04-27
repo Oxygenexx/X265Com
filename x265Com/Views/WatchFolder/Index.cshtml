@@ -1,16 +1,37 @@
 ﻿@model x265Com.Models.WatchFolderModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Watch Folder";
 }
-
-<h2>WatchFolderIndex</h2>
-<div class="jumbotron">
-    <h1>@Model.FolderName</h1>
-    
-    @foreach (x265Com.Models.FileModel _File in Model.FileModels)
-    {
-        <p> @_File.FileName @_File.FileLength </p>
+<!--border: 1px solid black;-->
+<style>    
+    table, th, td {        
+        padding: 5px;
     }
- 
-</div>
 
+    table {
+        border-spacing: 5px;
+    }
+</style>
+
+<div class="jumbotron">
+    <h1>WatchFolder</h1>
+</div>
+<h2>@Model.FolderName</h2>
+<div>
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>File Type</th>
+            <th>Length</th>
+        </tr>
+        @foreach (x265Com.Models.FileModel _File in Model.FileModels)
+        {
+            <tr>
+                <td>@_File.FileName</td>
+                <td>@_File.FileType</td>
+                <td>@_File.FileLength</td>
+            </tr>
+        }
+    </table>
+
+</div>

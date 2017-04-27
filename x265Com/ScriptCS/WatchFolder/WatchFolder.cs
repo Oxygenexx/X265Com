@@ -42,6 +42,8 @@ namespace x265Com.ScriptCS
                 {
                     FileModel _FileModel = new FileModel();
                     _FileModel.FileName = File.Name;
+                    _FileModel.FileType = File.Extension;
+                    _FileModel.FileType = _FileModel.FileType.Length <= 1 ? "" : _FileModel.FileType.Substring(1);
                     _FileModel.FileLength = GetLengthStringFromLong(File.Length);
                     _WatchFolderModel.FileModels.Add(_FileModel);
                 }
@@ -49,7 +51,7 @@ namespace x265Com.ScriptCS
             return _WatchFolderModel;
         }
         /// <summary>
-        /// Convertit un long représentant la taille en octets en une chaine de caractère avec l'unité qui va bien
+        /// Convertit un long représentant la taille en octets en une chaîne de charactères avec l'unité qui va bien
         /// </summary>
         /// <param name="_length">taille en octet</param>
         /// <returns>string avec l'unité</returns>
