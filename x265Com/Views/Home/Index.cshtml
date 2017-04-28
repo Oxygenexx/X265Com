@@ -7,35 +7,78 @@
     <p class="lead">x265Com is an online HEVC encoder</p>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        Profile de transcode :<br>
-        <p>
-            <select name="Profile de transcode">
-                <option value="1920*1080">Android</option>
-                <option value="Ipad">Ipad</option>
-                <option value="Youtube">Youtube </option>
-            </select>
-            
-        </p>        
-        <p>
-            <input type="checkbox" name="Wpp" value="isWpp"> Use Wpp
-        </p>
-        <p>
-            <select name="ConversionSpeed/Quality">
-                <option value="Slow">Slow</option>
-                <option value="Regular">Regular</option>
-                <option value="Fast">Fast</option>
-            </select>
-            Conversion Speed/Quality
-        </p>
-        <p>
-            <input type="checkbox" name="QP" value="isQP"> Use Quantizer Parameter
+<!--#region Drop Zone  -->
+<style type="text/css">
+    #dropZone {
+        background: gray;
+        border: black dashed 3px;
+        width: 200px;
+        padding: 50px;
+        text-align: center;
+        color: white;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#dropZone').filedrop({
+            url: '@Url.Action("UploadFiles")',
+            paramname: 'files',
+            maxFiles: 5,
+            dragOver: function () {
+                $('#dropZone').css('background', 'blue');
+            },
+            dragLeave: function () {
+                $('#dropZone').css('background', 'gray');
+            },
+            drop: function () {
+                $('#dropZone').css('background', 'gray');
+            },
+            afterAll: function () {
+                $('#dropZone').html('The file(s) have been uploaded successfully!');
+            },
+            uploadFinished: function (i, file, response, time) {
+                $('#uploadResult').append('<li>' + file.name + '</li>');
+            }
+        });
+    });
+</script>
 
-        </p>
+
+<h2>File Drag & Drop Upload Demo</h2>
+<div id="dropZone">Drop your files here</div>
+<br />
+Uploaded Files:
+<ul id="uploadResult"></ul>
+
+<!--#endregion -->
+
+<div class="col-md-4">
+    <h2>Getting started</h2>
+    Profile de transcode :<br>
+    <p>
+        <select name="Profile de transcode">
+            <option value="1920*1080">Android</option>
+            <option value="Ipad">Ipad</option>
+            <option value="Youtube">Youtube </option>
+        </select>
+
+    </p>
+    <p>
+        <input type="checkbox" name="Wpp" value="isWpp"> Use Wpp
+    </p>
+    <p>
+        <select name="ConversionSpeed/Quality">
+            <option value="Slow">Slow</option>
+            <option value="Regular">Regular</option>
+            <option value="Fast">Fast</option>
+        </select>
+        Conversion Speed/Quality
+    </p>
+    <p>
+        <input type="checkbox" name="QP" value="isQP"> Use Quantizer Parameter
+
+    </p>
 
 
-        <p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
-    </div>
+    <p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
 </div>
