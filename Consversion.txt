@@ -1,0 +1,75 @@
+namespace x265Com.ScriptCS
+    using System.Xml;
+{
+    public class ConversionInfo
+    {
+        public bool isWpp { get; set; }
+        public enum ConversionSpeed { Slow, Regular, Fast }
+        public int Length { get; set; }
+        public int Width { get; set; }
+        public int EndTime { get; set; }
+        public string InFormat { get; set; }
+        public string OutFormat { get; set; }
+
+
+    }
+    public class ConversionHelper
+    {
+        public static void LaunchCMDCommand(string _cmdstring)
+        {
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = "/C " + _cmdstring;
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                XMLWriting(ConfigurationManager.AppSettings["ErrorFilePath"].ToString(),e.message);
+            }
+        }
+    }
+    public class ProfileInfo
+    {
+        public bool isWpp { get; set; }
+        public enum ConversionSpeed { Slow, Regular, Fast }
+        public int Length { get; set; }
+        public int Width { get; set; }
+        public int EndTime { get; set; }
+        public string InFormat { get; set; }
+        public string OutFormat { get; set; }
+    }
+    public class ProfileHelper
+    {
+        public static void JsonWriting(string _path, string _string)
+        {
+            using (StreamWriter file = File.CreateText(_path + ".txt"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                //serialize object directly into file stream
+                serializer.Serialize(file, _string);
+            }
+        }
+        public static void XMLWriting(string _path, string _string)
+        {
+            
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+
+            XmlWriter writer = XmlWriter.Create(_path+".xml", settings);
+            writer.WriteStartDocument();
+            writer.WriteElementString(_string);
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            
+            writer.Flush();
+            writer.Close();
+
+
+        }
+    }
+}
