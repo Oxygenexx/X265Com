@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace x265Com.ScriptCS
 {
@@ -31,20 +32,21 @@ namespace x265Com.ScriptCS
         {
             bool _isSuccess = false;
             string _CMDConversionStr = string.Empty;
+            //InFilePath = @Tools.StripPathOfDoubleSlashes(InFilePath);
+            //OutFilePath = @Tools.StripPathOfDoubleSlashes(OutFilePath);
+            //InFilePath = Regex.Unescape(InFilePath);
+            //OutFilePath = Regex.Unescape(OutFilePath);
             _CMDConversionStr = this.BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
-            try
-            {
-                DateTime _Begin = DateTime.Now;
-                LaunchCMDCommand(_CMDConversionStr);
-                TimeSpan _Elapsed = _Begin - DateTime.Now;
-            }
-            catch (Exception e)
-            {
-                Tools.WriteErrorInXml(e.Message);
-                return _isSuccess;
-            }
+            DateTime _Begin = DateTime.Now;
+            LaunchCMDCommand(_CMDConversionStr);
+            TimeSpan _Elapsed = _Begin - DateTime.Now;            
+            //catch (Exception e)
+            //{
+            //    Tools.WriteErrorInXml(e.Message);
+            //    return _isSuccess;
+            //}
             _isSuccess = true;
             return _isSuccess;
         }
@@ -54,28 +56,30 @@ namespace x265Com.ScriptCS
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
-            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -i " + InFilePath + InFileName + " ");
+            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -i " + InFilePath + @"\" + InFileName + " ");
+            cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
             this.getResolutionCommandString();
-            if (isWpp)
-            {
-                _cmdStringBuilder.Append("--wpp ");
-            }
-            else
-            {
-                _cmdStringBuilder.Append("--no-wpp ");
-            }
-            _cmdStringBuilder.Append(OutFilePath + OutFileName);
+            //if (isWpp)
+            //{
+            //    _cmdStringBuilder.Append("--wpp ");
+            //}
+            //else
+            //{
+            //    _cmdStringBuilder.Append("--no-wpp ");
+            //}
+            _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName);
 
             return _cmdStringBuilder.ToString();
         }
         public static void LaunchCMDCommand(string _cmdstring)
         {
+            //_cmdstring = "/C " + _cmdstring;
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C " + _cmdstring;
+            startInfo.Arguments = _cmdstring;
             process.StartInfo = startInfo;
             process.Start();
         }
