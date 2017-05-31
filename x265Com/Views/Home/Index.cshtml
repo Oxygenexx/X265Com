@@ -47,70 +47,92 @@
 Uploaded Files:
 <ul id="uploadResult"></ul>
 <!--#endregion -->
-<!--
-<div class="col-md-4">
-    <h2>Getting started</h2>
-    Profile de transcode :<br>
-    <p>
-        <select name="Profile de transcode">
-            <option value="1920*1080">Android</option>
-            <option value="Ipad">Ipad</option>
-            <option value="Youtube">Youtube </option>
-        </select>
-
-    </p>
-    <p>
-        <input type="checkbox" name="Wpp" value="isWpp"> Use Wpp
-    </p>
-    <p>
-        <select name="ConversionSpeed/Quality">
-            <option value="Slow">Slow</option>
-            <option value="Regular">Regular</option>
-            <option value="Fast">Fast</option>
-        </select>
-        Conversion Speed/Quality
-    </p>
-    <p>
-        <input type="checkbox" name="QP" value="isQP"> Use Quantizer Parameter
-
-    </p> -->
 
 
+   <form name= "ConversionForm" method = "post">
+			
+	   <label> Cadence Image
+	    <input type="range" id="cadenceImage" value="15" max="300" min="1" step="1"> 
+	   </label> </br> </br>
+	   
+	   <label> Definition Image
+	   	<select id="defImage"> </br>
+	   		<option value="0">UHD - 3840*2160</option> 
+	   		<option value="1" selected>HD - 1920*1080</option>
+	   		<option value="2">HD - 1440*1080</option>
+	   		<option value="3">1270*720</option>
+	   		<option value="3">Proxy - 480p</option>
+	   		<option value="3">Proxy - 360p</option>
+	   		<option value="3">Proxy - 240p</option>
+	   		<option value="3">Proxy - 144p</option>
+	   	</select> 
+	   </label> </br> </br>
+	   
+	   <label> Taille CTU
+	   	<select id="selectCTU"> </br>
+	   		<option value="0">64*64</option> 
+	   		<option value="1" selected>32*32</option>
+	   		<option value="2">16*16</option>
+	   		<option value="3">8*8</option>
+	   	</select> 
+	   </label> </br> </br>
+	   
+	   <label> Conteneur
+	   	<select id="selectConteneur"> </br>
+	   		<option value="0">.mov</option> 
+	   		<option value="1" selected>.mxf</option>
+	   		<option value="2">.mp4</option>
+	   	</select> 
+	   </label> </br> </br>
+	   
+	   <label> Video Codec
+	   	<select id="selectVideoCodec"> </br>
+	   		<option value="0">HEVC</option> 
+	   		<option value="1" selected>h264</option>
+	   		<option value="2">Mpeg2</option>
+	   		<option value="3">vp9</option>
+	   	</select> 
+	   </label> </br> </br>
+	   
+	   <label> Debit Video
+	   	<input type="range" id="debitVideo" value="15" max="300" min="1" step="1"> 
+	   </label> </br> </br>
+	   
+	   <label> Taille GOP
+	   	<input type="range" id="tailleGop" value="15" max="300" min="1" step="1"> 
+	   </label> </br> </br>
+	   
+	   <label> Wpp
+	   	<input type="checkbox" id="Wppcbox" value="Wpp"> </br>
+	   </label> </br> 
+			
+	   <label> Qp
+		   <input type="checkbox" id="QPcbox" value="Qp"> </br>
+	   </label> </br> 
 
-    <form method="post">
-        <p>
-            <select name="Profile de transcode">
-                <option value="1920*1080">Android</option>
-                <option value="Ipad">Ipad</option>
-                <option value="Youtube">Youtube </option>
-            </select>
-
-        </p>
-        <p>
-            @*<input type="checkbox" name="Wpp" value=""> Use Wpp*@
-            <input data-val="true" data-val-required="The isWpp field is required." id="isWpp" name="isWpp" type="checkbox" value="true" /> use Wpp
-</p>
-        <p>
-            <select name="ConversionSpeed/Quality">
-                <option value="Slow">Slow</option>
-                <option value="Regular">Regular</option>
-                <option value="Fast">Fast</option>
-            </select>
-            Conversion Speed/Quality
-        </p>
-        <p>
-            <input type="checkbox" name="QP" value=""> Use Quantizer Parameter
-
-        </p>
-        <input type="submit" value="Begin Conversion" class="btn btn-primary btn-lg" />        
+       <label> 
+        <input type="radio" name="group1" value="Slow">Slow </br>
+        <input type="radio" name="group1" value="Very Slow"> Very Slow </br>
+        <input type="radio" name="group1" value="Fast"> Fast </br>
+       </label>
+			
+	   <label> Audio Codec
+	    <select id="selectAudioCodec"> </br>
+		    <option value="0">mp3</option> 
+			<option value="1" selected>wmv</option>
+			<option value="2">pcm</option>
+			<option value="3">aac</option>
+		</select> 
+	   </label> </br> </br>
+			
+			<label> Debit Audio
+		        <input type="range" id="debitAudio" value="15" max="300" min="1" step="1"> 
+			</label> </br> </br>
+			
+		
+			<input type="submit" name="BeginConversionButton" value="BeginConversion"> </br>     
         @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
         </div>*@
-
-        @*<div>
-            <label for="Employees">Employee Count:</label>
-            <input type="text" name="Employees" value="" />
-        </div>*@
-
     </form> 
 
 
