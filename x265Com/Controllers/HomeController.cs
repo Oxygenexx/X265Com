@@ -21,7 +21,7 @@ namespace x265Com.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Monitor()
         {
             ViewBag.Message = "Your contact page.";
 
