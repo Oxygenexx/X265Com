@@ -19,8 +19,7 @@
     }
 </style>
 <script type="text/javascript">
-    $(function () {
-        $('#dropZone').filedrop({
+    $('#dropZone').filedrop({
             url: '@Url.Action("UploadFiles")',
             paramname: 'files',
             maxFiles: 5,
@@ -40,18 +39,15 @@
                 $('#uploadResult').append('<li>' + file.name + '</li>');
             }
         });
-    });
+
 </script>
-
-
 <h2>File Drag & Drop Upload Demo</h2>
 <div id="dropZone">Drop your files here</div>
 <br />
 Uploaded Files:
 <ul id="uploadResult"></ul>
-
 <!--#endregion -->
-
+<!--
 <div class="col-md-4">
     <h2>Getting started</h2>
     Profile de transcode :<br>
@@ -77,8 +73,63 @@ Uploaded Files:
     <p>
         <input type="checkbox" name="QP" value="isQP"> Use Quantizer Parameter
 
-    </p>
+    </p> -->
 
 
-    <p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
-</div>
+
+    <form method="post">
+        <p>
+            <select name="Profile de transcode">
+                <option value="1920*1080">Android</option>
+                <option value="Ipad">Ipad</option>
+                <option value="Youtube">Youtube </option>
+            </select>
+
+        </p>
+        <p>
+            @*<input type="checkbox" name="Wpp" value=""> Use Wpp*@
+            <input data-val="true" data-val-required="The isWpp field is required." id="isWpp" name="isWpp" type="checkbox" value="true" /> use Wpp
+</p>
+        <p>
+            <select name="ConversionSpeed/Quality">
+                <option value="Slow">Slow</option>
+                <option value="Regular">Regular</option>
+                <option value="Fast">Fast</option>
+            </select>
+            Conversion Speed/Quality
+        </p>
+        <p>
+            <input type="checkbox" name="QP" value=""> Use Quantizer Parameter
+
+        </p>
+        <input type="submit" value="Begin Conversion" class="btn btn-primary btn-lg" />
+        @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
+        </div>*@
+
+        @*<div>
+            <label for="Employees">Employee Count:</label>
+            <input type="text" name="Employees" value="" />
+        </div>*@
+
+    </form> 
+
+
+@{
+    if (IsPost) {
+        bool _isWpp = Request.Form["isWpp"].AsBool();
+        x265Com.ScriptCS.ConversionInfo _ConversionInfo {
+            isWpp = _isWpp;
+        };
+
+        //string contactname = Request.Form["contactname"];
+        //int employeecount = Request.Form["employees"].AsInt();
+
+        @*<text>
+          You entered: <br />
+          isWpp: @isWpp <br />
+          Contact Name: @contactname <br />
+          Employee Count: @employeecount <br />
+        </text>*@
+    }
+}
+

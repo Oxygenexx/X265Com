@@ -10,17 +10,26 @@
         public string InFormat { get; set; }
         public string OutFormat { get; set; }
 
-
-    }
-    public class ConversionHelper
-    {
+        public static string BuildConversionString(ConversionInfo _ConversionInfo)
+        {            
+            string _cmdstring = "";
+            if(_ConversionInfo.isWpp)
+            {
+                _cmdstring += " --wpp";
+            }
+            else
+            {
+                _cmdstring += " --no-wpp";
+            }
+            return string.Empty;
+        }
         public static void LaunchCMDCommand(string _cmdstring)
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C "+ _cmdstring;
+            startInfo.Arguments = "/C " + _cmdstring;
             process.StartInfo = startInfo;
             process.Start();
         }

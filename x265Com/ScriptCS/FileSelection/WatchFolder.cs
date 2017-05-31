@@ -22,7 +22,6 @@ namespace x265Com.ScriptCS
             {
                 FileS.Add(_File);
             }
-
             WatchFolderModel _WatchFolderModel = BuildWatchFolderModel(FileS);
 
             return _WatchFolderModel;
