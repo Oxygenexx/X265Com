@@ -20,25 +20,25 @@
 </style>
 <script type="text/javascript">
     $('#dropZone').filedrop({
-            url: '@Url.Action("UploadFiles")',
-            paramname: 'files',
-            maxFiles: 5,
-            dragOver: function () {
-                $('#dropZone').css('background', 'blue');
-            },
-            dragLeave: function () {
-                $('#dropZone').css('background', 'gray');
-            },
-            drop: function () {
-                $('#dropZone').css('background', 'gray');
-            },
-            afterAll: function () {
-                $('#dropZone').html('The file(s) have been uploaded successfully!');
-            },
-            uploadFinished: function (i, file, response, time) {
-                $('#uploadResult').append('<li>' + file.name + '</li>');
-            }
-        });
+        url: '@Url.Action("UploadFiles")',
+        paramname: 'files',
+        maxFiles: 5,
+        dragOver: function () {
+            $('#dropZone').css('background', 'blue');
+        },
+        dragLeave: function () {
+            $('#dropZone').css('background', 'gray');
+        },
+        drop: function () {
+            $('#dropZone').css('background', 'gray');
+        },
+        afterAll: function () {
+            $('#dropZone').html('The file(s) have been uploaded successfully!');
+        },
+        uploadFinished: function (i, file, response, time) {
+            $('#uploadResult').append('<li>' + file.name + '</li>');
+        }
+    });
 
 </script>
 <h2>File Drag & Drop Upload Demo</h2>
@@ -48,123 +48,193 @@ Uploaded Files:
 <ul id="uploadResult"></ul>
 <!--#endregion -->
 
-   <input id="File1" type="file" />  <br /> 
-   <video width="400" height="222" controls="controls"></video> <br /> <br />   
+<input id="FileInput" type="file" />  <br />
+<video width="400" height="222" controls="controls"></video> <br /> <br />
 
-   <form name= "ConversionForm" method = "post">
-			
-	   <label> Cadence Image
-	    <input type="range" id="cadenceImage" value="15" max="300" min="1" step="1"> 
-	   </label> </br> </br>
-	   
-	   <label> Definition Image
-	   	<select id="defImage"> </br>
-	   		<option value="0">UHD - 3840*2160</option> 
-	   		<option value="1" selected>HD - 1920*1080</option>
-	   		<option value="2">HD - 1440*1080</option>
-	   		<option value="3">1270*720</option>
-	   		<option value="4">Proxy - 480p</option>
-	   		<option value="5">Proxy - 360p</option>
-	   		<option value="6">Proxy - 240p</option>
-	   		<option value="7">Proxy - 144p</option>
-	   	</select> 
-	   </label> </br> </br>
-	   
-	   <label> Taille CTU
-	   	<select id="selectCTU"> </br>
-	   		<option value="0">64*64</option> 
-	   		<option value="1" selected>32*32</option>
-	   		<option value="2">16*16</option>
-	   		<option value="3">8*8</option>
-	   	</select> 
-	   </label> </br> </br>
-	   
-	   <label> Conteneur
-	   	<select id="selectConteneur"> </br>
-	   		<option value="0">.mov</option> 
-	   		<option value="1" selected>.mxf</option>
-	   		<option value="2">.mp4</option>
-	   	</select> 
-	   </label> </br> </br>
-	   
-	   <label> Video Codec
-	   	<select id="selectVideoCodec"> </br>
-	   		<option value="0">HEVC</option> 
-	   		<option value="1" selected>h264</option>
-	   		<option value="2">Mpeg2</option>
-	   		<option value="3">vp9</option>
-	   	</select> 
-	   </label> </br> </br>
-	   
-	   <label> Debit Video
-	   	<input type="range" id="debitVideo" value="15" max="300" min="1" step="1"> 
-	   </label> </br> </br>
-	   
-	   <label> Taille GOP
-	   	<input type="range" id="tailleGop" value="15" max="300" min="1" step="1"> 
-	   </label> </br> </br>
-	   
-	   <label> Wpp
-	   	<input type="checkbox" id="Wppcbox" value="Wpp"> </br>
-	   </label> </br> 
-			
-	   <label> Qp
-		   <input type="checkbox" id="QPcbox" value="Qp"> </br>
-	   </label> </br> 
+<form name="ConversionForm" method="post">
 
-       <label> Performance Option
-           <select id="perfOption"> </br>
-               <option value="0">ultrafast</option>
-               <option value="1">superfast</option>
-               <option value="2">veryfast</option>
-               <option value="3">faster</option>
-               <option value="4">fast</option>
-               <option value="5" selected>medium</option>
-               <option value="6">slow</option>
-               <option value="7">slower</option>
-               <option value="8">veryslow</option>
-               <option value="9">placebo</option>
+    <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
+    <input type="text" name="InputFilePathAndName" value="" />
+    <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
+    <input type="text" name="OutputFilePathAndName" value="" />
+    <label>
+        Cadence Image
+        <input type="range" id="cadenceImage" value="15" max="300" min="1" step="1">
+    </label> </br> </br>
 
-           </select>  
-       </label>
-			
-	   <label> Audio Codec
-	    <select id="selectAudioCodec"> </br>
-		    <option value="0">mp3</option> 
-			<option value="1" selected>wmv</option>
-			<option value="2">pcm</option>
-			<option value="3">aac</option>
-		</select> 
-	   </label> </br> </br>
-			
-			<label> Debit Audio
-		        <input type="range" id="debitAudio" value="15" max="300" min="1" step="1"> 
-			</label> </br> </br>
-			
-		
-			<input type="submit" name="BeginConversionButton" value="BeginConversion"> </br>     
-        @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
+    <label>
+        Definition Image
+        <select id="defImage">
+            </br>
+            <option value="0">UHD - 3840*2160</option>
+            <option value="1" selected>HD - 1920*1080</option>
+            <option value="2">HD - 1440*1080</option>
+            <option value="3">1270*720</option>
+            <option value="4">Proxy - 480p</option>
+            <option value="5">Proxy - 360p</option>
+            <option value="6">Proxy - 240p</option>
+            <option value="7">Proxy - 144p</option>
+        </select>
+    </label> </br> </br>
+
+    <label>
+        Taille CTU
+        <select id="selectCTU">
+            </br>
+            <option value="0">64*64</option>
+            <option value="1" selected>32*32</option>
+            <option value="2">16*16</option>
+            <option value="3">8*8</option>
+        </select>
+    </label> </br> </br>
+
+    <label>
+        Conteneur
+        <select id="selectConteneur">
+            </br>
+            <option value="0">.mov</option>
+            <option value="1" selected>.mxf</option>
+            <option value="2">.mp4</option>
+        </select>
+    </label> </br> </br>
+
+    <label>
+        Video Codec
+        <select id="selectVideoCodec">
+            </br>
+            <option value="0">HEVC</option>
+            <option value="1" selected>h264</option>
+            <option value="2">Mpeg2</option>
+            <option value="3">vp9</option>
+        </select>
+    </label> </br> </br>
+
+    <label>
+        Debit Video
+        <input type="range" id="debitVideo" value="15" max="300" min="1" step="1">
+    </label> </br> </br>
+
+    <label>
+        Taille GOP
+        <input type="range" id="tailleGop" value="15" max="300" min="1" step="1">
+    </label> </br> </br>
+
+    <label>
+        Wpp
+        <input type="checkbox" id="Wppcbox" value="Wpp"> </br>
+    </label> </br>
+
+    <label>
+        Qp
+        <input type="checkbox" id="QPcbox" value="Qp"> </br>
+    </label> </br>
+
+    <label>
+        Performance Option
+        <select id="perfOption">
+            </br>
+            <option value="0">ultrafast</option>
+            <option value="1">superfast</option>
+            <option value="2">veryfast</option>
+            <option value="3">faster</option>
+            <option value="4">fast</option>
+            <option value="5" selected>medium</option>
+            <option value="6">slow</option>
+            <option value="7">slower</option>
+            <option value="8">veryslow</option>
+            <option value="9">placebo</option>
+
+        </select>
+    </label>
+
+    <label>
+        Audio Codec
+        <select id="selectAudioCodec">
+            </br>
+            <option value="0">mp3</option>
+            <option value="1" selected>wmv</option>
+            <option value="2">pcm</option>
+            <option value="3">aac</option>
+        </select>
+    </label> </br> </br>
+
+    <label>
+        Debit Audio
+        <input type="range" id="debitAudio" value="15" max="300" min="1" step="1">
+    </label> </br> </br>
+
+
+    <input type="submit" name="BeginConversionButton" value="BeginConversion"> </br>
+    @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
         </div>*@
-    </form> 
+</form>
 
 
 @{
-    if (IsPost) {
-        bool _isWpp = Request.Form["isWpp"].AsBool();
+    if (IsPost)
+    {
+        bool _isWpp = Request.Form["Wppcbox"].AsBool();
+        //int _isWpp = Request.Form["isWpp"].AsBool();
+        //cadenceImage
+        string _InputFilePathAndName = @Request.Form["InputFilePathAndName"];
+        //string _OutputFilePath = new System.Text.StringBuilder(_OutputFilePathAndName).Remove().ToString();
+        string _InputFileName = "";
+        string _InputFilepath = "";
+        //if (string.IsNullOrEmpty(_InputFilePathAndName))
+        //{
+        int index = _InputFilePathAndName.LastIndexOf(@"\");
+        //if (index == 0)
+        //  throw new Exception;
+        _InputFileName = _InputFilePathAndName.Substring((index + 1), (_InputFilePathAndName.Length - (index + 1)));
+        _InputFilepath = _InputFilePathAndName.Substring(0, index);
+        //}
+
+        string _OutputFilePathAndName = @Request.Form["OutputFilePathAndName"];
+        string _OutputFileName = "";
+        string _OutputFilepath = "";
+        //if (string.IsNullOrEmpty(_InputFilePathAndName))
+        //{
+        index = _OutputFilePathAndName.LastIndexOf(@"\");
+        //if (index == 0)
+        //  throw new Exception;
+        _OutputFileName = _OutputFilePathAndName.Substring((index + 1), (_OutputFilePathAndName.Length - (index + 1)));
+        _OutputFilepath = _OutputFilePathAndName.Substring(0, index);
+        //}
+        //string _OutputFilePath = _OutputFilePathAndName
+        int _cadenceImage = Request.Form["cadenceImage"].AsInt();
+        int _defImage = Request.Form["defImage"].AsInt();
         x265Com.ScriptCS.ConversionInfo _ConversionInfo = new x265Com.ScriptCS.ConversionInfo()
         {
+            InFilePath = _InputFilepath,
+            InFileName = _InputFileName,
+            OutFilePath = _OutputFilepath,
+            OutFileName = _OutputFileName,
+            cadenceImage = _cadenceImage,
+            DefImage = _defImage,
             isWpp = _isWpp
         };
-
+        bool isSuccess = _ConversionInfo.StartConversion();
+        if (isSuccess)
+        {
+            <text>
+                OK
+            </text>
+        }
+        else
+        {
+            <text>
+                KO
+            </text>
+        }
         //string contactname = Request.Form["contactname"];
         //int employeecount = Request.Form["employees"].AsInt();
 
         @*<text>
-          You entered: <br />
-          isWpp: @isWpp <br />
-          Contact Name: @contactname <br />
-          Employee Count: @employeecount <br />
-        </text>*@
+              You entered: <br />
+              isWpp: @isWpp <br />
+              Contact Name: @contactname <br />
+              Employee Count: @employeecount <br />
+            </text>*@
     }
 }
 
