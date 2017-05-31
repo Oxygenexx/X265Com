@@ -214,6 +214,7 @@
     <Compile Include="ScriptCS\FileSelection\FileSelectionHelper.cs" />
     <Compile Include="ScriptCS\FileSelection\WatchFolder.cs" />
     <Compile Include="ScriptCS\Profile\Profile.cs" />
+    <Compile Include="ScriptCS\Tools\Tools.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

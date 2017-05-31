@@ -102,7 +102,7 @@ Uploaded Files:
             <input type="checkbox" name="QP" value=""> Use Quantizer Parameter
 
         </p>
-        <input type="submit" value="Begin Conversion" class="btn btn-primary btn-lg" />
+        <input type="submit" value="Begin Conversion" class="btn btn-primary btn-lg" />        
         @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
         </div>*@
 
@@ -117,8 +117,9 @@ Uploaded Files:
 @{
     if (IsPost) {
         bool _isWpp = Request.Form["isWpp"].AsBool();
-        x265Com.ScriptCS.ConversionInfo _ConversionInfo {
-            isWpp = _isWpp;
+        x265Com.ScriptCS.ConversionInfo _ConversionInfo = new x265Com.ScriptCS.ConversionInfo()
+        {
+            isWpp = _isWpp
         };
 
         //string contactname = Request.Form["contactname"];

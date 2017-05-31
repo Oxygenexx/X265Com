@@ -1,4 +1,6 @@
-﻿namespace x265Com.ScriptCS
+﻿using System;
+
+namespace x265Com.ScriptCS
 {
     public class ConversionInfo
     {
@@ -10,10 +12,29 @@
         public string InFormat { get; set; }
         public string OutFormat { get; set; }
 
-        public static string BuildConversionString(ConversionInfo _ConversionInfo)
+        public bool StartConversion()
+        {
+            bool _isSuccess=false;
+            string _CMDConversionStr = string.Empty;
+            _CMDConversionStr = this.BuildConversionString();
+            if (string.IsNullOrEmpty(_CMDConversionStr))
+                return _isSuccess;
+            try
+            {
+                LaunchCMDCommand(_CMDConversionStr);
+            }
+            catch (Exception e)
+            {
+
+                return _isSuccess;
+            }
+            _isSuccess = true;
+            return _isSuccess;
+        }
+        public string BuildConversionString()
         {            
             string _cmdstring = "";
-            if(_ConversionInfo.isWpp)
+            if(isWpp)
             {
                 _cmdstring += " --wpp";
             }
