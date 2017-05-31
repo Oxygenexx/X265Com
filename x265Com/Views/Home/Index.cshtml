@@ -4,7 +4,7 @@
 
 <div class="jumbotron">
     <h1>x265Com</h1>
-    <p class="lead">x265Com is an online HEVC encoder</p>
+    <p class="lead">x265Com est un encodeur vidéo HEVC</p>
 </div>
 
 <!--#region Drop Zone  -->
@@ -110,10 +110,20 @@ Uploaded Files:
 		   <input type="checkbox" id="QPcbox" value="Qp"> </br>
 	   </label> </br> 
 
-       <label> 
-        <input type="radio" name="group1" value="Slow">Slow </br>
-        <input type="radio" name="group1" value="Very Slow"> Very Slow </br>
-        <input type="radio" name="group1" value="Fast"> Fast </br>
+       <label> Performance Option
+           <select id="perfOption"> </br>
+               <option value="0">ultrafast</option>
+               <option value="1">superfast</option>
+               <option value="2">veryfast</option>
+               <option value="3">faster</option>
+               <option value="4">fast</option>
+               <option value="5" selected>medium</option>
+               <option value="6">slow</option>
+               <option value="7">slower</option>
+               <option value="8">veryslow</option>
+               <option value="9">placebo</option>
+
+           </select>  
        </label>
 			
 	   <label> Audio Codec
