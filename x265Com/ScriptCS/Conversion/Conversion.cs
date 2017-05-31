@@ -77,11 +77,13 @@ namespace x265Com.ScriptCS
             //_cmdstring = "/C " + _cmdstring;
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = _cmdstring;
             process.StartInfo = startInfo;
             process.Start();
+            process.WaitForExit();
+            //process.ExitCode();
         }
         public string getResolutionCommandString()
         {
