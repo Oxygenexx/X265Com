@@ -1,99 +1,17 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
-<!-- Début Region CSS test : je mets le css ici pour l'instant -->
-
-<link rel="stylesheet" type="text/css" href="FormulaireStyle.css">
-
-<style>
-    select.test {
-        background-color: transparent;
-        border-radius: 10px;
-    }
-
-    input[type=submit] {
-        background-color: #38ADDF;
-        border: none;
-        color: white;
-        padding: 16px 32px;
-        text-decoration: none;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 10px;
-    }
-
-    input[type="range"] {
-        position: relative;
-        margin-left: 1em;
-    }
-
-        input[type="range"]:after,
-        input[type="range"]:before {
-            position: absolute;
-            top: 1em;
-            color: #aaa;
-        }
-
-        input[type="range"]:before {
-            left: 0em;
-            content: attr(min);
-        }
-
-        input[type="range"]:after {
-            right: 0em;
-            content: attr(max);
-        }
-</style>
-
-<!-- Fin Region CSS test : je mets le css ici pour l'instant -->
-
+<!-- lien vers le contenu CSS de la page Index -->
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/FormulaireStyle.css" />
+</head>
 
 <div class="jumbotron">
     <h1>x265Com</h1>
     <p class="lead">x265Com est un encodeur vidéo HEVC</p>
 </div>
 
-<!--#region Drop Zone  -->
-<style type="text/css">
-    #dropZone {
-        background: gray;
-        border: black dashed 3px;
-        width: 200px;
-        padding: 50px;
-        text-align: center;
-        color: white;
-    }
-</style>
-<script type="text/javascript">
-    $('#dropZone').filedrop({
-        url: '@Url.Action("UploadFiles")',
-        paramname: 'files',
-        maxFiles: 5,
-        dragOver: function () {
-            $('#dropZone').css('background', 'blue');
-        },
-        dragLeave: function () {
-            $('#dropZone').css('background', 'gray');
-        },
-        drop: function () {
-            $('#dropZone').css('background', 'gray');
-        },
-        afterAll: function () {
-            $('#dropZone').html('The file(s) have been uploaded successfully!');
-        },
-        uploadFinished: function (i, file, response, time) {
-            $('#uploadResult').append('<li>' + file.name + '</li>');
-        }
-    });
-
-</script>
-<h2>File Drag & Drop Upload Demo</h2>
-<div id="dropZone">Drop your files here</div>
-<br />
-Uploaded Files:
-<ul id="uploadResult"></ul>
-<!--#endregion -->
-
+  
 <input id="FileInput" type="file" />  <br />
 <!-- <video width="400" height="222" controls="controls"></video> <br /> <br /> -->
 
@@ -104,14 +22,10 @@ Uploaded Files:
     <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
     <input type="text" name="OutputFilePathAndName" value="" />
     </br> </br>
-    <label>
-        Cadence Image
-        <input type="range" id="cadenceImage" value="15" max="300" min="1" step="1">
-    </label> </br> </br>
-
+   
     <label>
         Definition Image
-        <select id="defImage" class="test">
+        <select id="defImage" class="defImage test">
             </br>
             <option value="0">UHD - 3840*2160</option>
             <option value="1" selected>HD - 1920*1080</option>
@@ -122,11 +36,19 @@ Uploaded Files:
             <option value="6">Proxy - 240p</option>
             <option value="7">Proxy - 144p</option>
         </select>
+    </label>
+
+
+    <label>
+        Cadence Image
+        <input type="range" class="range" id="cadenceImage" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <output name="result4"></output>
+        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
 
     <label>
         Taille CTU
-        <select id="selectCTU" class="test">
+        <select id="selectCTU">
             </br>
             <option value="0">64*64</option>
             <option value="1" selected>32*32</option>
@@ -134,6 +56,17 @@ Uploaded Files:
             <option value="3">8*8</option>
         </select>
     </label> </br> </br>
+
+    <label>
+    Video Codec
+    <select id="selectVideoCodec" class="videoCodec">
+        </br>
+        <option value="0">HEVC</option>
+        <option value="1" selected>h264</option>
+        <option value="2">Mpeg2</option>
+        <option value="3">vp9</option>
+    </select>
+    </label>
 
     <label>
         Conteneur
@@ -146,44 +79,28 @@ Uploaded Files:
     </label> </br> </br>
 
     <label>
-        Video Codec
-        <select id="selectVideoCodec">
-            </br>
-            <option value="0">HEVC</option>
-            <option value="1" selected>h264</option>
-            <option value="2">Mpeg2</option>
-            <option value="3">vp9</option>
-        </select>
-    </label> </br> </br>
-
-    <label>
         Debit Video
-        <input type="range" id="debitVideo" value="15" max="300" min="1" step="1">
-        <script type="text/javascript">
-            $(function () {
-                $('.range').next().text('--'); // Valeur par défaut
-                $('.range').on('input', function () {
-                    var $set = $(this).val();
-                    $(this).next().text($set);
-                });
-            });
-        </script>
+        <input type="range" class="range" id="debitVideo" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <output name="result4"></output>
+        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
 
     <label>
         Taille GOP
-        <input type="range" id="tailleGop" value="15" max="300" min="1" step="1">
+        <input type="range" class="range" id="tailleGop" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <output name="result4"></output>
+        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
 
     <label>
-        Wpp
+        Enable Wpp
         <input type="checkbox" id="Wppcbox" value="Wpp"> </br>
-    </label> </br>
+    </label> 
 
     <label>
-        Qp
+        Enable Qp
         <input type="checkbox" id="QPcbox" value="Qp"> </br>
-    </label> </br>
+    </label> </br> </br>
 
     <label>
         Performance Option
@@ -199,13 +116,12 @@ Uploaded Files:
             <option value="7">slower</option>
             <option value="8">veryslow</option>
             <option value="9">placebo</option>
-
         </select>
     </label> </br> </br>
 
     <label>
         Audio Codec
-        <select id="selectAudioCodec">
+        <select id="selectAudioCodec" class="test">
             </br>
             <option value="0">mp3</option>
             <option value="1" selected>wmv</option>
@@ -216,9 +132,10 @@ Uploaded Files:
 
     <label>
         Debit Audio
-        <input type="range" id="debitAudio" value="15" max="300" min="1" step="1">
+        <input type="range" class="range test" id="debitAudio" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <output name="result4"></output>
+        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
-
 
     <input type="submit" name="BeginConversionButton" value="BeginConversion"> </br>
     @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>

@@ -1,33 +1,17 @@
 ﻿body {
-    background-color: #E3E8EA;
+    background-color: white;
 }
 
 h2 {
-    color: navy;
+    color: white;
     margin-left: 20px;
 }
 
-input[type="range"] {
-    position: relative;
-    margin-left: 1em;
-}
-input[type="range"]:after,
-input[type="range"]:before {
-    position: absolute;
-    top: 1em;
-    color: #aaa;
-}
-input[type="range"]:before {
-    left:0em;
-    content: attr(min);
-}
-input[type="range"]:after {
-    right: 0em;
-    content: attr(max);
+input[type=checkbox]{
+    margin-right: 30px;
 }
 
 input[type=submit] {
-    background-color: #38ADDF;
     border: none;
     color: white;
     padding: 16px 32px;
@@ -37,8 +21,46 @@ input[type=submit] {
 	border-radius: 10px;
 }
 
-select.test {
-	background-color: transparent;
-	border-radius: 10px;
+input[type=text] {
+    margin-right: 20px;
 }
 
+select {
+    background-color: transparent;
+    border-radius: 10px;
+}
+.jumbotron {
+    padding: 20px;
+}
+
+.defImage {
+    margin-right:20px;
+}
+.videoCodec {
+    margin-right:20px;
+}
+
+/*test grille avec bootstrap*/
+
+.row {
+    width : 960px;
+    margin : 10px auto;
+}
+
+.row > test {
+    float : left;
+    margin : 0 10px;
+}
+
+.w-1 { width : 60px; }
+.w-2 { width : 140px; }
+.w-3 { width : 220px; }
+.w-4 { width : 300px; }
+.w-5 { width : 380px; }
+.w-6 { width : 460px; }
+.w-7 { width : 540px; }
+.w-8 { width : 620px; }
+.w-9 { width : 700px; }
+.w-10 { width : 780px; }
+.w-11 { width : 860px; }
+.w-12 { width : 940px; }
