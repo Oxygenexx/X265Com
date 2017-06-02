@@ -2,16 +2,9 @@
 @{
     ViewBag.Title = "Watch Folder";
 }
-<!--border: 1px solid black;-->
-<style>    
-    table, th, td {        
-        padding: 5px;
-    }
-
-    table {
-        border-spacing: 5px;
-    }
-</style>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/Watchfolder.css" />
+</head>
 
 <div class="jumbotron">
     <h1>WatchFolder</h1>
@@ -23,6 +16,8 @@
             <th>File Name</th>
             <th>File Type</th>
             <th>Length</th>
+            <th>Job Progress</th>
+            <th>Job Duration</th>
         </tr>
         @foreach (x265Com.Models.FileModel _File in Model.FileModels)
         {
@@ -30,6 +25,14 @@
                 <td>@_File.FileName</td>
                 <td>@_File.FileType</td>
                 <td>@_File.FileLength</td>
+                <td>
+                    <progress id="avancement" max="100" value="50">25%</progress>
+                    <span id="pourcentage"></span>
+                    <input type="button" onclick="modif(-10);" value="-">
+                    <input type="button" onclick="modif(10);" value="+">
+                    <script type="text/javascript" src="~/Scripts/AvancementBaliseProgress.js"></script>
+                </td>
+                <td>@DateTime.Now.Year</td>
             </tr>
         }
     </table>

@@ -1,0 +1,15 @@
+﻿    
+table, th, td {        
+    padding: 5px;
+}
+
+table {
+    border-spacing: 5px;
+}
+h1 {
+    color: blueviolet;
+}
+
+.jumbotron {
+    padding: 20px;
+}
