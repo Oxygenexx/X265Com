@@ -19,7 +19,7 @@ namespace x265Com.ScriptCS
         public int CTU { get; set; }
         public enum conteneur { mov, mxf, mp4 }
         public int Conteneur { get; set; }
-        public enum videoCodec { HEVC, h264, Mpeg2, vp9 }
+        public enum videoCodec { HEVC, h264, vp9 }
         public int VideoCodec { get; set; }
         public int debitVideo { get; set; }
         public int tailleGop { get; set; }

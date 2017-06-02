@@ -23,7 +23,7 @@ namespace x265Com.Controllers
 
         public ActionResult Monitor()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "This is the Monitor Page.";
 
             return View();
         }
