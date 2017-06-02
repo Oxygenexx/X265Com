@@ -2,78 +2,13 @@
     ViewBag.Title = "Monitor";
 }
 
-<!---->Début zone class CSS-->
+<link rel="stylesheet" type="text/css" href="~/Content/Watchfolder.css" />
 
-<style>
-    input[type="range"] {
-        position: relative;
-        margin-left: 1em;
-    }
+<div class="jumbotron">
+    <h1>@ViewBag.Title</h1>
+</div>
 
-        input[type="range"]:after,
-        input[type="range"]:before {
-            position: absolute;
-            top: 1em;
-            color: #aaa;
-        }
-
-        input[type="range"]:before {
-            left: 0em;
-            content: attr(min);
-        }
-
-        input[type="range"]:after {
-            right: 0em;
-            content: attr(max);
-        }
-</style>
-
-<!--Fin Zone CSS-->
-
-<h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
-
-
-<text method="get" action ="URL a rentré">
-    L'encodage est réussi, la vidéo à mis tempsEncodage à être encodé. 
-
-</text>
-</br>
-
-<form method="post" action="#" onchange="AfficheRange()" onkeyup="AfficheRange()">
-    <fieldset>
-        <input id="Range" type="range" step="0.01" value="0" min="-2" max="2">
-        <span id="AfficheValue">Valeur=0</script></span>
-    </fieldset>
-<
-<script>
-    $(function AfficheRange () {
-        $('.range').next().text('--'); // Valeur par défaut
-        $('.range').on('input', function () {
-            var $set = $(this).val();
-            $(this).next().text($set);
-        });
-    });
-</script>
-
-    <form method="post" action="#" oninput="result.value=Range.value">
-        <fieldset>
-            <input style="margin-left:4%;width:82%" type="range" step="0.01" name="Range" value="" min="-2" max="2">
-            <br />
-            value=
-            <output for="out" name="result"></output>
-        </fieldset>
-    </form>
 

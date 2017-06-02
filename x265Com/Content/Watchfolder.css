@@ -6,10 +6,8 @@ table, th, td {
 table {
     border-spacing: 5px;
 }
-h1 {
-    color: blueviolet;
-}
 
 .jumbotron {
     padding: 20px;
 }
+
