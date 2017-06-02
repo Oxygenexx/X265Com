@@ -1,6 +1,52 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
+<!-- Début Region CSS test : je mets le css ici pour l'instant -->
+
+<link rel="stylesheet" type="text/css" href="FormulaireStyle.css">
+
+<style>
+    select.test {
+        background-color: transparent;
+        border-radius: 10px;
+    }
+
+    input[type=submit] {
+        background-color: #38ADDF;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    input[type="range"] {
+        position: relative;
+        margin-left: 1em;
+    }
+
+        input[type="range"]:after,
+        input[type="range"]:before {
+            position: absolute;
+            top: 1em;
+            color: #aaa;
+        }
+
+        input[type="range"]:before {
+            left: 0em;
+            content: attr(min);
+        }
+
+        input[type="range"]:after {
+            right: 0em;
+            content: attr(max);
+        }
+</style>
+
+<!-- Fin Region CSS test : je mets le css ici pour l'instant -->
+
 
 <div class="jumbotron">
     <h1>x265Com</h1>
@@ -65,7 +111,7 @@ Uploaded Files:
 
     <label>
         Definition Image
-        <select id="defImage">
+        <select id="defImage" class="test">
             </br>
             <option value="0">UHD - 3840*2160</option>
             <option value="1" selected>HD - 1920*1080</option>
@@ -80,7 +126,7 @@ Uploaded Files:
 
     <label>
         Taille CTU
-        <select id="selectCTU">
+        <select id="selectCTU" class="test">
             </br>
             <option value="0">64*64</option>
             <option value="1" selected>32*32</option>
@@ -113,6 +159,15 @@ Uploaded Files:
     <label>
         Debit Video
         <input type="range" id="debitVideo" value="15" max="300" min="1" step="1">
+        <script type="text/javascript">
+            $(function () {
+                $('.range').next().text('--'); // Valeur par défaut
+                $('.range').on('input', function () {
+                    var $set = $(this).val();
+                    $(this).next().text($set);
+                });
+            });
+        </script>
     </label> </br> </br>
 
     <label>
@@ -146,7 +201,7 @@ Uploaded Files:
             <option value="9">placebo</option>
 
         </select>
-    </label>
+    </label> </br> </br>
 
     <label>
         Audio Codec
