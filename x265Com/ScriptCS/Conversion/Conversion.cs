@@ -27,6 +27,8 @@ namespace x265Com.ScriptCS
         public enum audioCodec { mp3, wmv, pcm, aac }
         public int AudioCodec { get; set; }
         public int debitAudio { get; set; }
+        public string logErrorPath { get; set; }
+        public string logDataPath { get; set; }
 
         public bool StartConversion(out int _exitCode, out TimeSpan _Elapsed, out string _message)
         {
@@ -52,7 +54,7 @@ namespace x265Com.ScriptCS
         }
         //G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi
         //G:\Documents\Visual\WatchFolder\sortieTest.avi
-        //    ffmpeg -i G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -b:v 64k -vf scale=1270:720 G:\Documents\Visual\WatchFolder\sortieTest.avi
+        //    ffmpeg -i G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -vf scale=1270:720 G:\Documents\Visual\WatchFolder\sortieTest.avi
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
@@ -74,8 +76,15 @@ namespace x265Com.ScriptCS
 
             return _cmdStringBuilder.ToString();
         }
-        public static int LaunchCMDCommand(string _cmdstring)
+        /// <summary>
+        /// Fonction qui lance une commande CMD à partir d'une string et log les erreurs reçus, attention bug connu : lors d'une demande de conversion, 
+        /// si le fichier existe déjà, rien ne se passe
+        /// </summary>
+        /// <param name="_cmdstring"></param>
+        /// <returns></returns>
+        public int LaunchCMDCommand(string _cmdstring)
         {
+            
             _cmdstring = "/C " + _cmdstring;
             Process process = new Process();
             //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -85,35 +94,40 @@ namespace x265Com.ScriptCS
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
+            logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+            //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
             process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
-            process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
+            //process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
             process.Start();
             process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
+            //process.BeginOutputReadLine();
             string output = process.StandardOutput.ReadToEnd();
             //Console.WriteLine(output);
             string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
+            //File.AppendAllText(_LogPath, appendText);
             System.IO.File.WriteAllText(_LogPath, output);
             //Tools.WriteErrorInXml(output);
             process.WaitForExit();
             return process.ExitCode;
         }
 
-        static void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             //* Do your stuff with the output (write to console/log/StringBuilder)
             //Tools.WriteErrorInXml(outLine.Data);
-            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
-            System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
+            //System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            System.IO.File.AppendAllText(logDataPath, outLine.Data+"\n");
             //Console.WriteLine(outLine.Data);
         }
 
-        static void OutputErrorHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        void OutputErrorHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             //* Do your stuff with the output (write to console/log/StringBuilder)
             //Tools.WriteErrorInXml(outLine.Data);
-            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
-            System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+           // System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            System.IO.File.AppendAllText(logErrorPath, outLine.Data+"\n");
             //Console.WriteLine(outLine.Data);
         }
 
