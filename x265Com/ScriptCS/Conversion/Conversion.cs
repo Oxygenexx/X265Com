@@ -14,10 +14,8 @@ namespace x265Com.ScriptCS
         public bool isWpp { get; set; }
         public enum defImage { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
         public int DefImage { get; set; }
-        //public enum perfOption { placebo, veryslow, slower, slow, medium, fast, faster, veryfast, superfast, ultrafast }
         public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
         public perfOptionEnum perfOption { get; set; }
-        public int PerfOption { get; set; }
         public int CTU { get; set; }
         public enum conteneur { mov, mxf, mp4 }
         public int Conteneur { get; set; }
@@ -41,14 +39,15 @@ namespace x265Com.ScriptCS
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
             DateTime _Begin = DateTime.Now;
-            _exitCode = LaunchCMDCommand(_CMDConversionStr);
-            _Elapsed = _Begin - DateTime.Now;            
+            _exitCode = LaunchCMDCommand(_CMDConversionStr);            
+            _Elapsed = DateTime.Now - _Begin;
             //catch (Exception e)
             //{
             //    Tools.WriteErrorInXml(e.Message);
             //    return _isSuccess;
             //}
-            _isSuccess = true;
+            if (_exitCode == 0)
+                _isSuccess = true;
             return _isSuccess;
         }
         //G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi
@@ -86,20 +85,35 @@ namespace x265Com.ScriptCS
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
+            process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
             process.Start();
             process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
             string output = process.StandardOutput.ReadToEnd();
             //Console.WriteLine(output);
-            Tools.WriteErrorInXml(output);
+            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
+            System.IO.File.WriteAllText(_LogPath, output);
+            //Tools.WriteErrorInXml(output);
             process.WaitForExit();
             return process.ExitCode;
         }
 
-        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        static void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             //* Do your stuff with the output (write to console/log/StringBuilder)
-            Tools.WriteErrorInXml(outLine.Data);
+            //Tools.WriteErrorInXml(outLine.Data);
+            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
+            System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            //Console.WriteLine(outLine.Data);
+        }
+
+        static void OutputErrorHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            //Tools.WriteErrorInXml(outLine.Data);
+            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+            System.IO.File.WriteAllText(_LogPath, outLine.Data);
             //Console.WriteLine(outLine.Data);
         }
 
@@ -154,73 +168,8 @@ namespace x265Com.ScriptCS
         }
         public string getPresetCommandString()
         {
-            
             string _presetCMDLine =  "-preset " + perfOption.ToString() + " ";
             return _presetCMDLine;
-            //_presetCMDLine += perfOption.ToString();
-            //_presetCMDLine += " ";
-
-            //switch (PerfOption)
-            //{
-            //    //{ UHD_3840:2160, HD_1920:1080, HD_1440:1080, HD_1270:720, Pro:y_480p, Pro:y_360p, Pro:y_240p }
-            //    case (int)perfOption.ultrafast:
-            //        {
-            //            _presetCMDLine += "3840:2160 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.veryfast:
-            //        {
-            //            _presetCMDLine += "1920:1080 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.superfast:
-            //        {
-            //            _presetCMDLine += "1440:1080 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.faster:
-            //        {
-            //            _presetCMDLine += "1270:720 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.fast:
-            //        {
-            //            _presetCMDLine += "854:480 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.medium:
-            //        {
-            //            _presetCMDLine += "640:360 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.slow:
-            //        {
-            //            _presetCMDLine += "426:240 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.slower:
-            //        {
-            //            _presetCMDLine += "426:240 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.veryslow:
-            //        {
-            //            _presetCMDLine += "426:240 ";
-            //            break;
-            //        }
-            //    case (int)perfOption.placebo:
-            //        {
-            //            _presetCMDLine += "426:240 ";
-            //            break;
-            //        }
-            //    default:
-            //        {
-            //            _presetCMDLine += "1920:1080 ";
-            //            break;
-            //        }
-            //}
-
-            //return _presetCMDLine;
         }
     }
 }
