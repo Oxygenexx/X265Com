@@ -25,7 +25,7 @@
    
     <label>
         Definition Image
-        <select id="defImage" class="defImage test">
+        <select name="defImage" id="defImage" class="defImage test">
             </br>
             <option value="0">UHD - 3840*2160</option>
             <option value="1" selected>HD - 1920*1080</option>
@@ -41,14 +41,14 @@
 
     <label>
         Cadence Image
-        <input type="range" class="range" id="cadenceImage" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <input type="range" class="range" name="cadenceImage" id="cadenceImage" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
         <output name="result4"></output>
         <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
 
     <label>
         Taille CTU
-        <select id="selectCTU">
+        <select name="selectCTU" id="selectCTU">
             </br>
             <option value="0">64*64</option>
             <option value="1" selected>32*32</option>
@@ -59,7 +59,7 @@
 
     <label>
     Video Codec
-    <select id="selectVideoCodec" class="videoCodec">
+    <select name="selectVideoCodec" id="selectVideoCodec" class="videoCodec">
         </br>
         <option value="0">HEVC</option>
         <option value="1" selected>h264</option>
@@ -70,7 +70,7 @@
 
     <label>
         Conteneur
-        <select id="selectConteneur">
+        <select name="selectConteneur" id="selectConteneur">
             </br>
             <option value="0">.mov</option>
             <option value="1" selected>.mxf</option>
@@ -80,7 +80,7 @@
 
     <label>
         Debit Video
-        <input type="range" class="range" id="debitVideo" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <input type="range" class="range" name="debitVideo" id="debitVideo" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
         <output name="result4"></output>
         <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
@@ -94,17 +94,17 @@
 
     <label>
         Enable Wpp
-        <input type="checkbox" id="Wppcbox" value="Wpp"> </br>
+        <input type="checkbox" name="Wppcbox" id="Wppcbox" value="Wpp"> </br>
     </label> 
 
     <label>
         Enable Qp
-        <input type="checkbox" id="QPcbox" value="Qp"> </br>
+        <input type="checkbox" name="QPcbox" id="QPcbox" value="Qp"> </br>
     </label> </br> </br>
 
     <label>
         Performance Option
-        <select id="perfOption">
+        <select name="perfOption" id="perfOption">
             </br>
             <option value="0">ultrafast</option>
             <option value="1">superfast</option>
@@ -121,7 +121,7 @@
 
     <label>
         Audio Codec
-        <select id="selectAudioCodec" class="test">
+        <select name="selectAudioCodec" id="selectAudioCodec" class="test">
             </br>
             <option value="0">mp3</option>
             <option value="1" selected>wmv</option>
@@ -132,7 +132,7 @@
 
     <label>
         Debit Audio
-        <input type="range" class="range test" id="debitAudio" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+        <input type="range" class="range test" name="debitAudio" id="debitAudio" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
         <output name="result4"></output>
         <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
     </label> </br> </br>
@@ -152,13 +152,12 @@
         string _InputFileName = "";
         string _InputFilepath = "";
         //if (string.IsNullOrEmpty(_InputFilePathAndName))
-        //{ ffmpeg -i G:\Documents\Visual\\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -r 1 G:\Documents\Visual\WatchFolder\Test.avi
+        //{
         int index = _InputFilePathAndName.LastIndexOf(@"\");
         //if (index == 0)
         //  throw new Exception;
         _InputFileName = x265Com.ScriptCS.Tools.GetFileName(_InputFilePathAndName, index);
         _InputFilepath = x265Com.ScriptCS.Tools.GetFilePath(_InputFilePathAndName, index);
-        //_InputFilepath = x265Com.ScriptCS.Tools.StripPathOfDoubleSlashes(_InputFilepath);
         string _OutputFilePathAndName = Request.Form["OutputFilePathAndName"];
         string _OutputFileName = "";
         string _OutputFilepath = "";
@@ -169,10 +168,10 @@
         //  throw new Exception;
         _OutputFileName = x265Com.ScriptCS.Tools.GetFileName(_OutputFilePathAndName, index);
         _OutputFilepath = x265Com.ScriptCS.Tools.GetFilePath(_OutputFilePathAndName, index);
-        //_OutputFilepath = x265Com.ScriptCS.Tools.StripPathOfDoubleSlashes(_OutputFilepath);
         //}
         int _cadenceImage = Request.Form["cadenceImage"].AsInt();
         int _defImage = Request.Form["defImage"].AsInt();
+        int _perfOption = Request.Form["perfOption"].AsInt();
         x265Com.ScriptCS.ConversionInfo _ConversionInfo = new x265Com.ScriptCS.ConversionInfo()
         {
             InFilePath = _InputFilepath,
@@ -181,19 +180,23 @@
             OutFileName = _OutputFileName,
             cadenceImage = _cadenceImage,
             DefImage = _defImage,
+            perfOption = (x265Com.ScriptCS.ConversionInfo.perfOptionEnum)_perfOption,
             isWpp = _isWpp
         };
-        bool isSuccess = _ConversionInfo.StartConversion();
+        int _exitCode;
+        TimeSpan _Elapsed = new TimeSpan();
+        string _message;
+        bool isSuccess = _ConversionInfo.StartConversion(out _exitCode, out _Elapsed, out _message);
         if (isSuccess)
         {
             <text>
-                OK
+                OK Time Elapsed : @_Elapsed Message : @_message Exit Code : @_exitCode
             </text>
         }
         else
         {
             <text>
-                KO
+                KO Message : @_message Exit Code : @_exitCode
             </text>
         }
     }

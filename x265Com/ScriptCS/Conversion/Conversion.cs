@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace x265Com.ScriptCS
 {
@@ -14,7 +14,9 @@ namespace x265Com.ScriptCS
         public bool isWpp { get; set; }
         public enum defImage { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
         public int DefImage { get; set; }
-        public enum perfOption { placebo, veryslow, slower, slow, medium, fast, faster, veryfast, superfast, ultrafast }
+        //public enum perfOption { placebo, veryslow, slower, slow, medium, fast, faster, veryfast, superfast, ultrafast }
+        public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
+        public perfOptionEnum perfOption { get; set; }
         public int PerfOption { get; set; }
         public int CTU { get; set; }
         public enum conteneur { mov, mxf, mp4 }
@@ -28,20 +30,19 @@ namespace x265Com.ScriptCS
         public int AudioCodec { get; set; }
         public int debitAudio { get; set; }
 
-        public bool StartConversion()
+        public bool StartConversion(out int _exitCode, out TimeSpan _Elapsed, out string _message)
         {
+            _Elapsed = new TimeSpan();
+            _exitCode = 0;
+            _message = string.Empty;
             bool _isSuccess = false;
             string _CMDConversionStr = string.Empty;
-            //InFilePath = @Tools.StripPathOfDoubleSlashes(InFilePath);
-            //OutFilePath = @Tools.StripPathOfDoubleSlashes(OutFilePath);
-            //InFilePath = Regex.Unescape(InFilePath);
-            //OutFilePath = Regex.Unescape(OutFilePath);
-            _CMDConversionStr = this.BuildConversionString();
+            _CMDConversionStr = BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
             DateTime _Begin = DateTime.Now;
-            LaunchCMDCommand(_CMDConversionStr);
-            TimeSpan _Elapsed = _Begin - DateTime.Now;            
+            _exitCode = LaunchCMDCommand(_CMDConversionStr);
+            _Elapsed = _Begin - DateTime.Now;            
             //catch (Exception e)
             //{
             //    Tools.WriteErrorInXml(e.Message);
@@ -59,7 +60,7 @@ namespace x265Com.ScriptCS
             StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -i " + InFilePath + @"\" + InFileName + " ");
             cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
-            this.getResolutionCommandString();
+            _cmdStringBuilder.Append(getResolutionCommandString());
             //if (isWpp)
             //{
             //    _cmdStringBuilder.Append("--wpp ");
@@ -68,23 +69,40 @@ namespace x265Com.ScriptCS
             //{
             //    _cmdStringBuilder.Append("--no-wpp ");
             //}
+            _cmdStringBuilder.Append(getPresetCommandString());
+
             _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName);
 
             return _cmdStringBuilder.ToString();
         }
-        public static void LaunchCMDCommand(string _cmdstring)
+        public static int LaunchCMDCommand(string _cmdstring)
         {
-            //_cmdstring = "/C " + _cmdstring;
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            _cmdstring = "/C " + _cmdstring;
+            Process process = new Process();
+            //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = _cmdstring;
-            process.StartInfo = startInfo;
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = _cmdstring;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
             process.Start();
+            process.BeginErrorReadLine();
+            string output = process.StandardOutput.ReadToEnd();
+            //Console.WriteLine(output);
+            Tools.WriteErrorInXml(output);
             process.WaitForExit();
-            //process.ExitCode();
+            return process.ExitCode;
         }
+
+        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            Tools.WriteErrorInXml(outLine.Data);
+            //Console.WriteLine(outLine.Data);
+        }
+
         public string getResolutionCommandString()
         {
             string _resolutionCMDLine = "-vf scale=";
@@ -133,6 +151,76 @@ namespace x265Com.ScriptCS
                     }
             }
             return _resolutionCMDLine;
+        }
+        public string getPresetCommandString()
+        {
+            
+            string _presetCMDLine =  "-preset " + perfOption.ToString() + " ";
+            return _presetCMDLine;
+            //_presetCMDLine += perfOption.ToString();
+            //_presetCMDLine += " ";
+
+            //switch (PerfOption)
+            //{
+            //    //{ UHD_3840:2160, HD_1920:1080, HD_1440:1080, HD_1270:720, Pro:y_480p, Pro:y_360p, Pro:y_240p }
+            //    case (int)perfOption.ultrafast:
+            //        {
+            //            _presetCMDLine += "3840:2160 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.veryfast:
+            //        {
+            //            _presetCMDLine += "1920:1080 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.superfast:
+            //        {
+            //            _presetCMDLine += "1440:1080 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.faster:
+            //        {
+            //            _presetCMDLine += "1270:720 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.fast:
+            //        {
+            //            _presetCMDLine += "854:480 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.medium:
+            //        {
+            //            _presetCMDLine += "640:360 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.slow:
+            //        {
+            //            _presetCMDLine += "426:240 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.slower:
+            //        {
+            //            _presetCMDLine += "426:240 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.veryslow:
+            //        {
+            //            _presetCMDLine += "426:240 ";
+            //            break;
+            //        }
+            //    case (int)perfOption.placebo:
+            //        {
+            //            _presetCMDLine += "426:240 ";
+            //            break;
+            //        }
+            //    default:
+            //        {
+            //            _presetCMDLine += "1920:1080 ";
+            //            break;
+            //        }
+            //}
+
+            //return _presetCMDLine;
         }
     }
 }
