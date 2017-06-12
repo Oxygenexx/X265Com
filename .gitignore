@@ -3,6 +3,9 @@
 
 #Web.config car il contient des adresses à ne pas utiliser sur tous les ordis
 Web.config
+web.config
+Web.*
+web.*
 
 # User-specific files
 *.suo

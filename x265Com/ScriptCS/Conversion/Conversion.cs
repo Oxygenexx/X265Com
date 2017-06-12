@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace x265Com.ScriptCS
 {
@@ -14,8 +14,8 @@ namespace x265Com.ScriptCS
         public bool isWpp { get; set; }
         public enum defImage { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
         public int DefImage { get; set; }
-        public enum perfOption { placebo, veryslow, slower, slow, medium, fast, faster, veryfast, superfast, ultrafast }
-        public int PerfOption { get; set; }
+        public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
+        public perfOptionEnum perfOption { get; set; }
         public int CTU { get; set; }
         public enum conteneur { mov, mxf, mp4 }
         public int Conteneur { get; set; }
@@ -27,39 +27,41 @@ namespace x265Com.ScriptCS
         public enum audioCodec { mp3, wmv, pcm, aac }
         public int AudioCodec { get; set; }
         public int debitAudio { get; set; }
+        public string logErrorPath { get; set; }
+        public string logDataPath { get; set; }
 
-        public bool StartConversion()
+        public bool StartConversion(out int _exitCode, out TimeSpan _Elapsed, out string _message)
         {
+            _Elapsed = new TimeSpan();
+            _exitCode = 0;
+            _message = string.Empty;
             bool _isSuccess = false;
             string _CMDConversionStr = string.Empty;
-            //InFilePath = @Tools.StripPathOfDoubleSlashes(InFilePath);
-            //OutFilePath = @Tools.StripPathOfDoubleSlashes(OutFilePath);
-            //InFilePath = Regex.Unescape(InFilePath);
-            //OutFilePath = Regex.Unescape(OutFilePath);
-            _CMDConversionStr = this.BuildConversionString();
+            _CMDConversionStr = BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
             DateTime _Begin = DateTime.Now;
-            LaunchCMDCommand(_CMDConversionStr);
-            TimeSpan _Elapsed = _Begin - DateTime.Now;            
+            _exitCode = LaunchCMDCommand(_CMDConversionStr);            
+            _Elapsed = DateTime.Now - _Begin;
             //catch (Exception e)
             //{
             //    Tools.WriteErrorInXml(e.Message);
             //    return _isSuccess;
             //}
-            _isSuccess = true;
+            if (_exitCode == 0)
+                _isSuccess = true;
             return _isSuccess;
         }
         //G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi
         //G:\Documents\Visual\WatchFolder\sortieTest.avi
-        //    ffmpeg -i G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -b:v 64k -vf scale=1270:720 G:\Documents\Visual\WatchFolder\sortieTest.avi
+        //    ffmpeg -i G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -vf scale=1270:720 G:\Documents\Visual\WatchFolder\sortieTest.avi
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
             StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -i " + InFilePath + @"\" + InFileName + " ");
             cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
-            this.getResolutionCommandString();
+            _cmdStringBuilder.Append(getResolutionCommandString());
             //if (isWpp)
             //{
             //    _cmdStringBuilder.Append("--wpp ");
@@ -68,23 +70,67 @@ namespace x265Com.ScriptCS
             //{
             //    _cmdStringBuilder.Append("--no-wpp ");
             //}
+            _cmdStringBuilder.Append(getPresetCommandString());
+
             _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName);
 
             return _cmdStringBuilder.ToString();
         }
-        public static void LaunchCMDCommand(string _cmdstring)
+        /// <summary>
+        /// Fonction qui lance une commande CMD à partir d'une string et log les erreurs reçus, attention bug connu : lors d'une demande de conversion, 
+        /// si le fichier existe déjà, rien ne se passe
+        /// </summary>
+        /// <param name="_cmdstring"></param>
+        /// <returns></returns>
+        public int LaunchCMDCommand(string _cmdstring)
         {
-            //_cmdstring = "/C " + _cmdstring;
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            
+            _cmdstring = "/C " + _cmdstring;
+            Process process = new Process();
+            //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = _cmdstring;
-            process.StartInfo = startInfo;
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = _cmdstring;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+            //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
+            //process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
             process.Start();
+            process.BeginErrorReadLine();
+            //process.BeginOutputReadLine();
+            string output = process.StandardOutput.ReadToEnd();
+            //Console.WriteLine(output);
+            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
+            //File.AppendAllText(_LogPath, appendText);
+            System.IO.File.WriteAllText(_LogPath, output);
+            //Tools.WriteErrorInXml(output);
             process.WaitForExit();
-            //process.ExitCode();
+            return process.ExitCode;
         }
+
+        void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            //Tools.WriteErrorInXml(outLine.Data);
+            //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
+            //System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            System.IO.File.AppendAllText(logDataPath, outLine.Data+"\n");
+            //Console.WriteLine(outLine.Data);
+        }
+
+        void OutputErrorHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            //Tools.WriteErrorInXml(outLine.Data);
+            //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+           // System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            System.IO.File.AppendAllText(logErrorPath, outLine.Data+"\n");
+            //Console.WriteLine(outLine.Data);
+        }
+
         public string getResolutionCommandString()
         {
             string _resolutionCMDLine = "-vf scale=";
@@ -133,6 +179,11 @@ namespace x265Com.ScriptCS
                     }
             }
             return _resolutionCMDLine;
+        }
+        public string getPresetCommandString()
+        {
+            string _presetCMDLine =  "-preset " + perfOption.ToString() + " ";
+            return _presetCMDLine;
         }
     }
 }

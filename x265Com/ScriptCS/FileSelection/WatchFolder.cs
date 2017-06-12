@@ -12,7 +12,7 @@ namespace x265Com.ScriptCS
         {
             string WatchFolderPath = ConfigurationManager.AppSettings["WatchFolderPath"].ToString();
             //FileSystemWatcher _FileSystemWatcher = new FileSystemWatcher(WatchFolderPath);
-            DirectoryInfo _DirectoryInfo = new DirectoryInfo(WatchFolderPath);//Assuming Test is your Folder
+            DirectoryInfo _DirectoryInfo = new DirectoryInfo(WatchFolderPath);
 
             //FileInfo[] Files = _DirectoryInfo.GetFiles("*.txt"); //cette ligne permet de rechercher un pattern dans le directory regardé
             FileInfo[] _Files = _DirectoryInfo.GetFiles();

@@ -7,11 +7,20 @@ using System.Xml;
 
 namespace x265Com.ScriptCS
 {
+    public enum LogFileType { ErrorLog, ConsoleLog, ConsoleOutputHandlerLog, ConsoleOutputDataLog, ConsoleOutputErrorLog }
+
     public class Tools
     {
+        public static string GetLogFilePathAndName(LogFileType _LogFileType)
+        {
+            DateTime _Date = DateTime.Now;
+            return ConfigurationManager.AppSettings["LogFilePath"].ToString() + @"\" + _Date.Year.ToString() + "-" + _Date.Month.ToString() + "-" + _Date.Day.ToString() + "-" + _Date.Hour.ToString() + "-" + _Date.Minute.ToString() + "-" + _Date.Second.ToString() + "_" + _LogFileType.ToString()+".txt";
+        }
         public static void WriteErrorInXml(string _errorMessage)
         {
-            string _filePathAndName = ConfigurationManager.AppSettings["ErrorFilePath"].ToString() + @"\" + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Hour.ToString() + "-" + DateTime.Now.Minute.ToString() + "-" + DateTime.Now.Second.ToString() + "_ErrorLog";
+            string _filePathAndName = GetLogFilePathAndName(LogFileType.ErrorLog);
+            //DateTime _Date = DateTime.Now;
+            //string _filePathAndName = ConfigurationManager.AppSettings["ErrorFilePath"].ToString() + @"\" + _Date.Year.ToString() + "-" + _Date.Month.ToString() + "-" + _Date.Day.ToString() + "-" + _Date.Hour.ToString() + "-" + _Date.Minute.ToString() + "-" + _Date.Second.ToString() + "_ErrorLog";
             XMLWriting(_filePathAndName, _errorMessage);
         }
         public static void XMLWriting(string _path, string _string)
