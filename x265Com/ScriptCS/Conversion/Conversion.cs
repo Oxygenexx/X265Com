@@ -37,28 +37,40 @@ namespace x265Com.ScriptCS
             _message = string.Empty;
             bool _isSuccess = false;
             string _CMDConversionStr = string.Empty;
+
+            #region CheckIfInFileExists
+            bool _inFileExists = Tools.CheckIfFileExists(InFileName, InFilePath);
+            if (!_inFileExists)
+            {
+                _message = "Fichier d'entrée inexistant";
+                return _isSuccess;
+            }
+            #endregion
+
+            #region CheckIfOutDirectoryExists
+            bool _outDirectoryExists = Tools.CheckIfDirectoryExists(OutFilePath);
+            if (!_outDirectoryExists)
+            {
+                _message = "Dossier de sortie inexistant";
+                return _isSuccess;
+            }
+            #endregion
+
             _CMDConversionStr = BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
             DateTime _Begin = DateTime.Now;
             _exitCode = LaunchCMDCommand(_CMDConversionStr);            
             _Elapsed = DateTime.Now - _Begin;
-            //catch (Exception e)
-            //{
-            //    Tools.WriteErrorInXml(e.Message);
-            //    return _isSuccess;
-            //}
             if (_exitCode == 0)
                 _isSuccess = true;
             return _isSuccess;
         }
-        //G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi
-        //G:\Documents\Visual\WatchFolder\sortieTest.avi
-        //    ffmpeg -i G:\Documents\Visual\WatchFolder\Vikings_S01E01_VOSTFR_HDTV_XviD.avi -vf scale=1270:720 G:\Documents\Visual\WatchFolder\sortieTest.avi
+        
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
-            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -i " + InFilePath + @"\" + InFileName + " ");
+            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg " + "-thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 " + "-i " +  InFilePath + @"\" + InFileName + " ");
             cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
             _cmdStringBuilder.Append(getResolutionCommandString());
@@ -72,13 +84,12 @@ namespace x265Com.ScriptCS
             //}
             _cmdStringBuilder.Append(getPresetCommandString());
 
-            _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName);
+            _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName + " -y");
 
             return _cmdStringBuilder.ToString();
         }
         /// <summary>
-        /// Fonction qui lance une commande CMD à partir d'une string et log les erreurs reçus, attention bug connu : lors d'une demande de conversion, 
-        /// si le fichier existe déjà, rien ne se passe
+        /// Fonction qui lance une commande CMD à partir d'une string et log les erreurs reçus
         /// </summary>
         /// <param name="_cmdstring"></param>
         /// <returns></returns>
@@ -94,6 +105,7 @@ namespace x265Com.ScriptCS
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.Verb = "runas";
             logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
             //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
             process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
@@ -105,7 +117,8 @@ namespace x265Com.ScriptCS
             //Console.WriteLine(output);
             string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
             //File.AppendAllText(_LogPath, appendText);
-            System.IO.File.WriteAllText(_LogPath, output);
+            if(!string.IsNullOrEmpty(output))
+                System.IO.File.WriteAllText(_LogPath, output);
             //Tools.WriteErrorInXml(output);
             process.WaitForExit();
             return process.ExitCode;
@@ -118,6 +131,7 @@ namespace x265Com.ScriptCS
             //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
             //System.IO.File.WriteAllText(_LogPath, outLine.Data);
             System.IO.File.AppendAllText(logDataPath, outLine.Data+"\n");
+            //if(outLine.Data.Contains(""))
             //Console.WriteLine(outLine.Data);
         }
 
@@ -136,7 +150,6 @@ namespace x265Com.ScriptCS
             string _resolutionCMDLine = "-vf scale=";
             switch (DefImage)
             {
-                //{ UHD_3840:2160, HD_1920:1080, HD_1440:1080, HD_1270:720, Pro:y_480p, Pro:y_360p, Pro:y_240p }
                 case (int)defImage.UHD_3840x2160:
                     {
                         _resolutionCMDLine += "3840:2160 ";
