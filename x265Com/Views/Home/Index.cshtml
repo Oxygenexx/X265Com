@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
-
 <!-- lien vers le contenu CSS de la page Index -->
 <head>
     <link rel="stylesheet" type="text/css" href="~/Content/FormulaireStyle.css" />
@@ -12,139 +11,16 @@
     <p class="lead">x265Com est un encodeur vidéo HEVC</p>
 </div>
 
-  
+
 <input id="FileInput" type="file" />  <br />
 <!-- <video width="400" height="222" controls="controls"></video> <br /> <br /> -->
 
-<form name="ConversionForm" method="post">
-
-    <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
-    <input type="text" name="InputFilePathAndName" value="" />
-    <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
-    <input type="text" name="OutputFilePathAndName" value="" />
-    </br> </br>
-   
-    <label>
-        Definition Image
-        <select name="defImage" id="defImage" class="defImage test">
-            </br>
-            <option value="0">UHD - 3840*2160</option>
-            <option value="1" selected>HD - 1920*1080</option>
-            <option value="2">HD - 1440*1080</option>
-            <option value="3">1270*720</option>
-            <option value="4">Proxy - 480p</option>
-            <option value="5">Proxy - 360p</option>
-            <option value="6">Proxy - 240p</option>
-            <option value="7">Proxy - 144p</option>
-        </select>
-    </label>
-
-
-    <label>
-        Cadence Image
-        <input type="range" class="range" name="cadenceImage" id="cadenceImage" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
-        <output name="result4"></output>
-        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
-    </label> </br> </br>
-
-    <label>
-        Taille CTU
-        <select name="selectCTU" id="selectCTU">
-            </br>
-            <option value="0">64*64</option>
-            <option value="1" selected>32*32</option>
-            <option value="2">16*16</option>
-            <option value="3">8*8</option>
-        </select>
-    </label> </br> </br>
-
-    <label>
-    Video Codec
-    <select name="selectVideoCodec" id="selectVideoCodec" class="videoCodec">
-        </br>
-        <option value="0">HEVC</option>
-        <option value="1" selected>h264</option>
-        <option value="2">Mpeg2</option>
-        <option value="3">vp9</option>
-    </select>
-    </label>
-
-    <label>
-        Conteneur
-        <select name="selectConteneur" id="selectConteneur">
-            </br>
-            <option value="0">.mov</option>
-            <option value="1" selected>.mxf</option>
-            <option value="2">.mp4</option>
-        </select>
-    </label> </br> </br>
-
-    <label>
-        Debit Video
-        <input type="range" class="range" name="debitVideo" id="debitVideo" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
-        <output name="result4"></output>
-        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
-    </label> </br> </br>
-
-    <label>
-        Taille GOP
-        <input type="range" class="range" id="tailleGop" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
-        <output name="result4"></output>
-        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
-    </label> </br> </br>
-
-    <label>
-        Enable Wpp
-        <input type="checkbox" name="Wppcbox" id="Wppcbox" value="Wpp"> </br>
-    </label> 
-
-    <label>
-        Enable Qp
-        <input type="checkbox" name="QPcbox" id="QPcbox" value="Qp"> </br>
-    </label> </br> </br>
-
-    <label>
-        Performance Option
-        <select name="perfOption" id="perfOption">
-            </br>
-            <option value="0">ultrafast</option>
-            <option value="1">superfast</option>
-            <option value="2">veryfast</option>
-            <option value="3">faster</option>
-            <option value="4">fast</option>
-            <option value="5" selected>medium</option>
-            <option value="6">slow</option>
-            <option value="7">slower</option>
-            <option value="8">veryslow</option>
-            <option value="9">placebo</option>
-        </select>
-    </label> </br> </br>
-
-    <label>
-        Audio Codec
-        <select name="selectAudioCodec" id="selectAudioCodec" class="test">
-            </br>
-            <option value="0">mp3</option>
-            <option value="1" selected>wmv</option>
-            <option value="2">pcm</option>
-            <option value="3">aac</option>
-        </select>
-    </label> </br> </br>
-
-    <label>
-        Debit Audio
-        <input type="range" class="range test" name="debitAudio" id="debitAudio" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
-        <output name="result4"></output>
-        <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
-    </label> </br> </br>
-
-    <input type="submit" name="BeginConversionButton" value="BeginConversion"> </br>
-    @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
-        </div>*@
-</form>
-
+<div>
+    @Html.Partial("_ConversionPartial", new x265Com.Models.ConversionModel())
+</div>
 
 @{
+    /*
     if (IsPost)
     {
 
@@ -201,5 +77,6 @@
             </text>
         }
     }
+    */
 }
 

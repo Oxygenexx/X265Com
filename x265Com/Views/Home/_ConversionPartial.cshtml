@@ -1,0 +1,148 @@
+﻿@model x265Com.Models.ConversionModel
+
+<div id="divConversion">
+    @using (Ajax.BeginForm("_ConversionPartial", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divConversion" }))
+    {
+        @Html.AntiForgeryToken()
+        // <form name="ConversionForm" method="post">
+
+
+        <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
+            <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" />
+            <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
+            <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" />
+        //</br> </br>
+
+        <label>
+            Definition Image
+        </label>
+        <select name="defImage" id="defImage" class="defImage test">
+            <option value="0"@(Model != null && Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
+            <option value="1"@(Model != null && Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
+            <option value="2"@(Model != null && Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
+            <option value="3"@(Model != null && Model.DefImage == 3 ? "selected" : "")>1270*720</option>
+            <option value="4"@(Model != null && Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
+            <option value="5"@(Model != null && Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
+            <option value="6"@(Model != null && Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
+            <option value="7"@(Model != null && Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
+        </select>
+
+
+
+                <label>
+                    Cadence Image
+                    <input type="range" class="range" name="cadenceImage" id="cadenceImage" value="@(Model != null ? Model.cadenceImage : 0) " max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+                    <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
+                </label>
+
+                <label>
+                    Taille CTU
+                    <select name="selectCTU" id="selectCTU">
+                        <option value="0">64*64</option>
+                        <option value="1" selected>32*32</option>
+                        <option value="2">16*16</option>
+                        <option value="3">8*8</option>
+                    </select>
+                </label>
+
+                <label>
+                    Video Codec
+                    <select name="selectVideoCodec" id="selectVideoCodec" class="videoCodec">
+                        <option value="0">HEVC</option>
+                        <option value="1" selected>h264</option>
+                        <option value="2">Mpeg2</option>
+                        <option value="3">vp9</option>
+                    </select>
+                </label>
+
+                <label>
+                    Conteneur
+                    <select name="selectConteneur" id="selectConteneur">
+                        <option value="0">.mov</option>
+                        <option value="1" selected>.mxf</option>
+                        <option value="2">.mp4</option>
+                    </select>
+                </label>
+
+                <label>
+                    Debit Video
+                    <input type="range" class="range" name="debitVideo" id="debitVideo" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+                    <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
+                </label>
+
+                <label>
+                    Taille GOP
+                    <input type="range" class="range" id="tailleGop" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+                    <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
+                </label>
+
+                <label>
+                    Enable Wpp
+                    <input type="checkbox" name="Wppcbox" id="Wppcbox" value="Wpp">
+                </label>
+
+                <label>
+                    Enable Qp
+                    <input type="checkbox" name="QPcbox" id="QPcbox" value="Qp">
+                </label>
+
+                <label>
+                    Performance Option
+                    <select name="perfOption" id="perfOption">
+                        <option value="0"@(Model != null && Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
+                        <option value="1"@(Model != null && Model.perfOption == 1 ? "selected" : "")>superfast</option>
+                        <option value="2"@(Model != null && Model.perfOption == 2 ? "selected" : "")>veryfast</option>
+                        <option value="3"@(Model != null && Model.perfOption == 3 ? "selected" : "")>faster</option>
+                        <option value="4"@(Model != null && Model.perfOption == 4 ? "selected" : "")>fast</option>
+                        <option value="5"@(Model != null && Model.perfOption == 5 ? "selected" : "")>medium</option>
+                        <option value="6"@(Model != null && Model.perfOption==6 ? "selected" : "")>slow</option>
+                        <option value="7"@(Model != null && Model.perfOption==7 ? "selected" : "")>slower</option>
+                        <option value="8"@(Model != null && Model.perfOption==8 ? "selected" : "")>veryslow</option>
+                        <option value="9"@(Model != null && Model.perfOption==9 ? "selected" : "")>placebo</option>
+                    </select>
+                </label>
+
+                <label>
+                    Audio Codec
+                    <select name="selectAudioCodec" id="selectAudioCodec" class="test">
+                        <option value="0">mp3</option>
+                        <option value="1" selected>wmv</option>
+                        <option value="2">pcm</option>
+                        <option value="3">aac</option>
+                    </select>
+                </label>
+
+                <label>
+                    Debit Audio
+                    <input type="range" class="range test" name="debitAudio" id="debitAudio" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+                    <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
+                </label>
+
+                <input type="submit" name="BeginConversionButton" value="BeginConversion">
+                @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
+                    </div>*@
+
+    }
+</div>
+@{
+    if (Model.isOver)
+    {
+        if (Model.isSuccess)
+        {
+            <text>
+                Conversion OK Time Elapsed : @Model.Elapsed.Hours:@Model.Elapsed.Minutes:@Model.Elapsed.Seconds Message : @Model.CMDconsoleMessage Exit Code : @Model.ExitCode
+            </text>
+        }
+        else
+        {
+            <text> Conversion KO Message : </text>if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> @Model.CMDconsoleMessage </text>} <text> Exit Code: </text>@Model.ExitCode
+
+
+
+        }
+    }
+}

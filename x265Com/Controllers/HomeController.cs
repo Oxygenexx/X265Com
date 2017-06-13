@@ -13,7 +13,7 @@ namespace x265Com.Controllers
         {
             return View();
         }
-        
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -29,15 +29,45 @@ namespace x265Com.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult EmployeeMaster()
+        public ActionResult _ConversionPartial()
         {
-            return View();
+            return PartialView("_ConversionPartial");
         }
         [HttpPost]
-        public ActionResult EmployeeMaster(EmpModel obj)
+        public ActionResult _ConversionPartial(Models.ConversionModel _ConversionModel)
         {
-            ViewBag.Records = "Name : " + obj.Name + " City:  " + obj.City + " Addreess: " + obj.Address;
-            return PartialView("EmployeeMaster");
+            string _InputFileName = "";
+            string _InputFilepath = "";
+            int index = _ConversionModel.InputFilePathAndName.LastIndexOf(@"\");
+            _InputFileName = ScriptCS.Tools.GetFileName(_ConversionModel.InputFilePathAndName, index);
+            _InputFilepath = ScriptCS.Tools.GetFilePath(_ConversionModel.InputFilePathAndName, index);
+            string _OutputFileName = "";
+            string _OutputFilepath = "";
+            index = _ConversionModel.OutputFilePathAndName.LastIndexOf(@"\");
+            _OutputFileName = ScriptCS.Tools.GetFileName(_ConversionModel.OutputFilePathAndName, index);
+            _OutputFilepath = ScriptCS.Tools.GetFilePath(_ConversionModel.OutputFilePathAndName, index);
+
+            ScriptCS.ConversionInfo _ConversionInfo = new ScriptCS.ConversionInfo()
+            {
+                InFilePath = _InputFilepath,
+                InFileName = _InputFileName,
+                OutFilePath = _OutputFilepath,
+                OutFileName = _OutputFileName,
+                cadenceImage = _ConversionModel.cadenceImage,
+                DefImage = _ConversionModel.DefImage,
+                perfOption = (ScriptCS.ConversionInfo.perfOptionEnum)_ConversionModel.perfOption,
+                isWpp = _ConversionModel.isWpp
+            };
+
+            int _exitCode;
+            System.TimeSpan _Elapsed = new System.TimeSpan();
+            string _message;
+            _ConversionModel.isSuccess = _ConversionInfo.StartConversion(out _exitCode, out _Elapsed, out _message);
+            _ConversionModel.isOver = true;
+            _ConversionModel.ExitCode = _exitCode;            
+            _ConversionModel.CMDconsoleMessage = _message;
+            _ConversionModel.Elapsed = _Elapsed;
+            return PartialView("_ConversionPartial", _ConversionModel);
         }
 
         #region UploadFiles
