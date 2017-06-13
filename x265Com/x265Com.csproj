@@ -233,6 +233,8 @@
     <Content Include="404.aspx" />
     <Content Include="Scripts\dragAndDrop.js" />
     <Content Include="Scripts\jquery.filedrop.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\ValeurCurseur.js" />
     <Content Include="Views\ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

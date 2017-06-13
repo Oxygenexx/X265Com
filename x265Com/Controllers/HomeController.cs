@@ -21,11 +21,23 @@ namespace x265Com.Controllers
             return View();
         }
 
+
         public ActionResult Monitor()
         {
             ViewBag.Message = "This is the Monitor Page.";
 
             return View();
+        }
+        [HttpGet]
+        public ActionResult EmployeeMaster()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EmployeeMaster(EmpModel obj)
+        {
+            ViewBag.Records = "Name : " + obj.Name + " City:  " + obj.City + " Addreess: " + obj.Address;
+            return PartialView("EmployeeMaster");
         }
 
         #region UploadFiles
