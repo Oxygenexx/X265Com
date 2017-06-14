@@ -54,6 +54,7 @@ namespace x265Com.Controllers
                 OutFilePath = _OutputFilepath,
                 OutFileName = _OutputFileName,
                 cadenceImage = _ConversionModel.cadenceImage,
+                VideoCodec = (ScriptCS.ConversionInfo.videoCodecEnum)_ConversionModel.VideoCodec,
                 DefImage = _ConversionModel.DefImage,
                 perfOption = (ScriptCS.ConversionInfo.perfOptionEnum)_ConversionModel.perfOption,
                 isWpp = _ConversionModel.isWpp

@@ -19,13 +19,13 @@ namespace x265Com.ScriptCS
         public int CTU { get; set; }
         public enum conteneur { mov, mxf, mp4 }
         public int Conteneur { get; set; }
-        public enum videoCodec { HEVC, h264, vp9 }
-        public int VideoCodec { get; set; }
+        public enum videoCodecEnum { HEVC, h264, Mpeg2, vp9 }
+        public videoCodecEnum VideoCodec { get; set; }
         public int debitVideo { get; set; }
         public int tailleGop { get; set; }
         public bool isQP { get; set; }
-        public enum audioCodec { mp3, wmv, pcm, aac }
-        public int AudioCodec { get; set; }
+        public enum audioCodecEnum { mp3, wmv, pcm, aac }
+        public audioCodecEnum AudioCodec { get; set; }
         public int debitAudio { get; set; }
         public string logErrorPath { get; set; }
         public string logDataPath { get; set; }
@@ -74,17 +74,18 @@ namespace x265Com.ScriptCS
             cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
             _cmdStringBuilder.Append(getResolutionCommandString());
+            _cmdStringBuilder.Append(getVideoCodec());
             //if (isWpp)
             //{
-            //    _cmdStringBuilder.Append("--wpp ");
+            //    _cmdStringBuilder.Append("-wpp:1 ");
             //}
             //else
             //{
-            //    _cmdStringBuilder.Append("--no-wpp ");
+            //    _cmdStringBuilder.Append("-no-wpp:0 ");
             //}
             _cmdStringBuilder.Append(getPresetCommandString());
 
-            _cmdStringBuilder.Append(OutFilePath + @"\" + OutFileName + " -y");
+            _cmdStringBuilder.Append(" -y "+OutFilePath + @"\" + OutFileName);
 
             return _cmdStringBuilder.ToString();
         }
@@ -192,6 +193,34 @@ namespace x265Com.ScriptCS
                     }
             }
             return _resolutionCMDLine;
+        }
+        public string getVideoCodec()
+        {
+            string _VideoCodecLine = "";
+            switch (VideoCodec)
+            {
+                case videoCodecEnum.HEVC:
+                    {
+                        _VideoCodecLine = "-c:v libx265 ";
+                        break;
+                    }
+                case videoCodecEnum.h264:
+                    {
+                        _VideoCodecLine = "";
+                        break;
+                    }
+                case videoCodecEnum.Mpeg2:
+                    {
+                        _VideoCodecLine = "-c:v mpeg2video ";
+                        break;
+                    }
+                case videoCodecEnum.vp9:
+                    {
+                        _VideoCodecLine = "-c:v libvpx-vp9 ";
+                        break;
+                    }
+            }
+            return _VideoCodecLine;
         }
         public string getPresetCommandString()
         {

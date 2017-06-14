@@ -40,7 +40,7 @@
 
                 <label>
                     Taille CTU
-                    <select name="selectCTU" id="selectCTU">
+                    <select name="CTU" id="selectCTU">
                         <option value="0">64*64</option>
                         <option value="1" selected>32*32</option>
                         <option value="2">16*16</option>
@@ -50,7 +50,7 @@
 
                 <label>
                     Video Codec
-                    <select name="selectVideoCodec" id="selectVideoCodec" class="videoCodec">
+                    <select name="VideoCodec" id="selectVideoCodec" class="videoCodec">
                         <option value="0">HEVC</option>
                         <option value="1" selected>h264</option>
                         <option value="2">Mpeg2</option>
@@ -60,7 +60,7 @@
 
                 <label>
                     Conteneur
-                    <select name="selectConteneur" id="selectConteneur">
+                    <select name="Conteneur" id="selectConteneur">
                         <option value="0">.mov</option>
                         <option value="1" selected>.mxf</option>
                         <option value="2">.mp4</option>
@@ -76,19 +76,19 @@
 
                 <label>
                     Taille GOP
-                    <input type="range" class="range" id="tailleGop" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
+                    <input type="range" class="range" name="tailleGop" id="tailleGop" value="15" max="300" min="1" step="1" oninput="result4.value=parseInt(d.value)">
                     <output name="result4"></output>
                     <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
                 </label>
 
                 <label>
                     Enable Wpp
-                    <input type="checkbox" name="Wppcbox" id="Wppcbox" value="Wpp">
+                    <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp">
                 </label>
 
                 <label>
                     Enable Qp
-                    <input type="checkbox" name="QPcbox" id="QPcbox" value="Qp">
+                    <input type="checkbox" name="isQP" id="QPcbox" value="Qp">
                 </label>
 
                 <label>
@@ -111,7 +111,7 @@
           <tr>  
                 <label>
                     Audio Codec
-                    <select name="selectAudioCodec" id="selectAudioCodec" class="test">
+                    <select name="sAudioCodec" id="selectAudioCodec" class="test">
                         <option value="0">mp3</option>
                         <option value="1" selected>wmv</option>
                         <option value="2">pcm</option>
