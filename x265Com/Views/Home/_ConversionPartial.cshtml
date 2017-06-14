@@ -6,7 +6,6 @@
         @Html.AntiForgeryToken()
         // <form name="ConversionForm" method="post">
 
-
         <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
             <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" />
             <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
@@ -133,16 +132,11 @@
     {
         if (Model.isSuccess)
         {
-            <text>
-                Conversion OK Time Elapsed : @Model.Elapsed.Hours:@Model.Elapsed.Minutes:@Model.Elapsed.Seconds Message : @Model.CMDconsoleMessage Exit Code : @Model.ExitCode
-            </text>
+            <text> Conversion OK Time Elapsed : @Model.Elapsed.Hours:@Model.Elapsed.Minutes:@Model.Elapsed.Seconds </text> if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code : @Model.ExitCode </text>
         }
         else
         {
-            <text> Conversion KO Message : </text>if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> @Model.CMDconsoleMessage </text>} <text> Exit Code: </text>@Model.ExitCode
-
-
-
+            <text> Conversion KO  </text>if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code: </text>@Model.ExitCode
         }
     }
 }
