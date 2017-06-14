@@ -6,25 +6,28 @@
         @Html.AntiForgeryToken()
         // <form name="ConversionForm" method="post">
 
-        <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
-            <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" />
-            <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
-            <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" />
-        //</br> </br>
+        <table>
+            <tr>
 
-        <label>
-            Definition Image
-        </label>
-        <select name="defImage" id="defImage" class="defImage test">
-            <option value="0"@(Model != null && Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
-            <option value="1"@(Model != null && Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
-            <option value="2"@(Model != null && Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
-            <option value="3"@(Model != null && Model.DefImage == 3 ? "selected" : "")>1270*720</option>
-            <option value="4"@(Model != null && Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
-            <option value="5"@(Model != null && Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
-            <option value="6"@(Model != null && Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
-            <option value="7"@(Model != null && Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
-        </select>
+    <label for="InputFilePathAndName">Chemin et nom de la vidéo à convertir:</label>
+    <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" />
+    <label for="OutputFilePathAndName">Chemin et nom de la vidéo de sortie:</label>
+    <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" />
+    
+
+                <label>
+                    Definition Image
+                </label>
+                <select name="defImage" id="defImage" class="defImage test">
+                    <option value="0" @(Model != null && Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
+                    <option value="1" @(Model != null && Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
+                    <option value="2" @(Model != null && Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
+                    <option value="3" @(Model != null && Model.DefImage == 3 ? "selected" : "")>1270*720</option>
+                    <option value="4" @(Model != null && Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
+                    <option value="5" @(Model != null && Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
+                    <option value="6" @(Model != null && Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
+                    <option value="7" @(Model != null && Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
+                </select>
 
 
 
@@ -91,19 +94,21 @@
                 <label>
                     Performance Option
                     <select name="perfOption" id="perfOption">
-                        <option value="0"@(Model != null && Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
-                        <option value="1"@(Model != null && Model.perfOption == 1 ? "selected" : "")>superfast</option>
-                        <option value="2"@(Model != null && Model.perfOption == 2 ? "selected" : "")>veryfast</option>
-                        <option value="3"@(Model != null && Model.perfOption == 3 ? "selected" : "")>faster</option>
-                        <option value="4"@(Model != null && Model.perfOption == 4 ? "selected" : "")>fast</option>
-                        <option value="5"@(Model != null && Model.perfOption == 5 ? "selected" : "")>medium</option>
-                        <option value="6"@(Model != null && Model.perfOption==6 ? "selected" : "")>slow</option>
-                        <option value="7"@(Model != null && Model.perfOption==7 ? "selected" : "")>slower</option>
-                        <option value="8"@(Model != null && Model.perfOption==8 ? "selected" : "")>veryslow</option>
-                        <option value="9"@(Model != null && Model.perfOption==9 ? "selected" : "")>placebo</option>
+                        <option value="0" @(Model != null && Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
+                        <option value="1" @(Model != null && Model.perfOption == 1 ? "selected" : "")>superfast</option>
+                        <option value="2" @(Model != null && Model.perfOption == 2 ? "selected" : "")>veryfast</option>
+                        <option value="3" @(Model != null && Model.perfOption == 3 ? "selected" : "")>faster</option>
+                        <option value="4" @(Model != null && Model.perfOption == 4 ? "selected" : "")>fast</option>
+                        <option value="5" @(Model != null && Model.perfOption == 5 ? "selected" : "")>medium</option>
+                        <option value="6" @(Model != null && Model.perfOption == 6 ? "selected" : "")>slow</option>
+                        <option value="7" @(Model != null && Model.perfOption == 7 ? "selected" : "")>slower</option>
+                        <option value="8" @(Model != null && Model.perfOption == 8 ? "selected" : "")>veryslow</option>
+                        <option value="9" @(Model != null && Model.perfOption == 9 ? "selected" : "")>placebo</option>
                     </select>
                 </label>
+            </tr>
 
+          <tr>  
                 <label>
                     Audio Codec
                     <select name="selectAudioCodec" id="selectAudioCodec" class="test">
@@ -120,11 +125,14 @@
                     <output name="result4"></output>
                     <script type="text/javascript" src="~/Scripts/ValeurCurseur.js"></script>
                 </label>
+           </tr>
 
                 <input type="submit" name="BeginConversionButton" value="BeginConversion">
                 @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
                     </div>*@
 
+
+        </table>
     }
 </div>
 @{
