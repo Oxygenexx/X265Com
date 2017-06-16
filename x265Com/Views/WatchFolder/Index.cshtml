@@ -30,13 +30,13 @@
                 <td>@_File.FileLength</td>
                 <td>
                     <progress id="avancement" max="100" value="50">25%</progress>
-                    <span id="pourcentage"></span>
+                    @*<span id="pourcentage"></span>
                     <input type="button" onclick="modif(-10);" value="-">
                     <input type="button" onclick="modif(10);" value="+">
-                    <script type="text/javascript" src="~/Scripts/AvancementBaliseProgress.js"></script>
+                    <script type="text/javascript" src="~/Scripts/AvancementBaliseProgress.js"></script>*@
                 </td>
-                <td>Bravo le job a échoué</td>
-                <td>@DateTime.Now.Year</td>  
+                <td></td>
+                <td></td>  
                 <td>@_File.FileName</td> 
                 <td><a href="~/Views/Home/Monitor.cshtml">@_File.FileName</a></td>             
             </tr>
