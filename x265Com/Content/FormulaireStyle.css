@@ -23,7 +23,8 @@ input[type=submit] {
 }
 
 input[type=text] {
-    margin-right: 20px;
+    background-color:ghostwhite;
+    border-radius:5px;
 }
 
 select {
@@ -35,33 +36,41 @@ select {
 }
 
 .defImage {
+    margin-right:60px;
+}
+.select {
     margin-right:20px;
+    padding:4px;
 }
-.videoCodec {
+
+p.ligne {
+    margin-right:60px
+}
+
+/*.colonne1 {
+	float: left;
+	width:350px;
+    margin-bottom:10px;
     margin-right:20px;
+}*/
+
+p.colonne1 {
+    margin-bottom:20px;
 }
 
-/*test grille avec bootstrap*/
 
-.row {
-    width : 960px;
-    margin : 10px auto;
+.margin {
+    margin-bottom: 5px;
 }
 
-.row > test {
-    float : left;
-    margin : 0 10px;
+label {
+    font-weight:bold ;
 }
 
-.w-1 { width : 60px; }
-.w-2 { width : 140px; }
-.w-3 { width : 220px; }
-.w-4 { width : 300px; }
-.w-5 { width : 380px; }
-.w-6 { width : 460px; }
-.w-7 { width : 540px; }
-.w-8 { width : 620px; }
-.w-9 { width : 700px; }
-.w-10 { width : 780px; }
-.w-11 { width : 860px; }
-.w-12 { width : 940px; }
+.bottom {
+    margin-bottom:20px;
+}
+
+h3 {
+    border-bottom:1px solid black;
+}
