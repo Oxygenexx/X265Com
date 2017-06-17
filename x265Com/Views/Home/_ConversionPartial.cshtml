@@ -5,21 +5,47 @@
     {
         @Html.AntiForgeryToken()
         // <form name="ConversionForm" method="post">
-        
 
-<p class="ligne">
-    <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
-    <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
-    <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
-    <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
-</p>
-    <h3>Vidéo</h3> <br />
 
-    <p class="colonne1">
-        <label>
-            Definition Image
-        </label>
-            <input type="text" list="defImage"/>
+        <p class="ligne">
+            <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
+            <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
+            <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
+            <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
+        </p>
+        <p class="ligne">
+            <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">
+            <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="RemoveFile">
+        </p>
+        <script type="text/javascript">
+            function AddFile() {
+                var div = $('<div class="form-group author-input"></div>');
+                var cnt = $('<label for="Author" class="control-label col-md-2">Author</label>');
+                div.append(cnt);
+                cnt = $('<div class="col-md-10"></div>');
+                cnt.append('<input type="text" name="authorList" />');
+                div.append(cnt);
+                div.append('<button class="glyphicon-plus-sign" onclick="addAuthor"></button>');
+                div.append('<button class="glyphicon-minus-sign" onclick="removeAuthor"></button>');
+
+
+                $(this).parent().after(div);
+            }
+            function RemoveFile() {
+                if ($('#AuthorSet > div').length > 1)
+                    $('#AuthorSet').remove($(this).parent());
+                else
+                    alert("Must have at least one author");
+            }
+        </script>
+
+        <h3>Vidéo</h3> <br />
+
+        <p class="colonne1">
+            <label>
+                Definition Image
+            </label>
+            <input type="text" list="defImage" />
             <datalist name="defImage" id="defImage" class="defImage">
                 <option value="0" @(Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
                 <option value="1" @(Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
@@ -29,11 +55,11 @@
                 <option value="5" @(Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
                 <option value="6" @(Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
                 <option value="7" @(Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
-            </datalist> 
+            </datalist>
 
-        <label>
-            Cadence Image
-        </label>
+            <label>
+                Cadence Image
+            </label>
             <input type="text" list="cadenceImage" />
             <datalist type="text" class="range, margin" name="cadenceImage" id="cadenceImage" value="@(Model.cadenceImage != 0 ? Model.cadenceImage : 25)">
                 <option>25 fps</option>
@@ -42,139 +68,141 @@
                 <option>100 fps</option>
                 <option>300 fps</option>
             </datalist>
-                
-        <br />
-    
-        <label>
-            Video Codec
-        </label>
+
+            <br />
+
+            <label>
+                Video Codec
+            </label>
             <select name="VideoCodec" id="selectVideoCodec" class="select videoCodec">
                 <option value="0">HEVC</option>
                 <option value="1" selected>h264</option>
                 <option value="2">Mpeg2</option>
                 <option value="3">vp9</option>
             </select>
-        
 
-        <label>
-            Conteneur
-        </label>
+
+            <label>
+                Conteneur
+            </label>
             <select name="Conteneur" id="selectConteneur" class="select Conteneur">
                 <option value="0">.mov</option>
                 <option value="1" selected>.mxf</option>
                 <option value="2">.mp4</option>
             </select>
-        
 
-        
-        <label>
-            Debit Video
-        </label>
+
+
+            <label>
+                Debit Video
+            </label>
             <input type="text" class="margin debitVideo" name="debitVideo" id="debitVideo" oninput="result4.value=parseInt(d.value)">
             <output name="result4"></output>
-        <br />
-    </p>
-    <h3>Audio</h3> <br />
-    <p class="colonne1">
-        <label>
-            Audio Codec
-        </label>
+            <br />
+        </p>
+        <h3>Audio</h3> <br />
+        <p class="colonne1">
+            <label>
+                Audio Codec
+            </label>
             <select name="sAudioCodec" id="selectAudioCodec" class="select audioCodec">
                 <option value="0">mp3</option>
                 <option value="1" selected>wmv</option>
                 <option value="2">pcm</option>
                 <option value="3">aac</option>
             </select>
-        
 
-        <label>
-            Debit Audio
-        </label>
+
+            <label>
+                Debit Audio
+            </label>
             <input type="text" class="text margin debitAudio" name="debitAudio" id="debitAudio" oninput="result4.value=parseInt(d.value)">
             <output name="result4"></output>
-    </p>
-    <h3>Paramètre de l'encodeur</h3> <br />
-    <p class="colonne1">
-        <label>
-            Performance Option
-        </label>
-        <select id="perfOption" name="perfOption" class="select">
-            <option value="0" @(Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
-            <option value="1" @(Model.perfOption == 1 ? "selected" : "")>superfast</option>
-            <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
-            <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
-            <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
-            <li role="separator" class="divider"></li>
-            <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
-            <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
-            <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
-            <option value="8" @(Model.perfOption == 8 ? "selected" : "")>veryslow</option>
-            <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
-        </select>
-        
-        @*<div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Menu déroulant
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#" title="Lien 1">Lien 1</a></li>
-                <li><a href="#" title="Lien 2">Lien 2</a></li>
-                <li><a href="#" title="Lien 3">Lien 3</a></li>
+        </p>
+        <h3>Paramètre de l'encodeur</h3> <br />
+        <p class="colonne1">
+            <label>
+                Performance Option
+            </label>
+            <select id="perfOption" name="perfOption" class="select">
+                <option value="0" @(Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
+                <option value="1" @(Model.perfOption == 1 ? "selected" : "")>superfast</option>
+                <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
+                <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
+                <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
                 <li role="separator" class="divider"></li>
-                <li><a href="#" title="Lien 4">Lien 4</a></li>
-            </ul>
-        </div>*@
+                <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
+                <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
+                <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
+                <option value="8" @(Model.perfOption == 8 ? "selected" : "")>veryslow</option>
+                <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
+            </select>
 
-        <label>
-            Taille GOP
-        </label>
-            <input type="text" list="tailleGop"/>
+            @*<div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Menu déroulant
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="#" title="Lien 1">Lien 1</a></li>
+                        <li><a href="#" title="Lien 2">Lien 2</a></li>
+                        <li><a href="#" title="Lien 3">Lien 3</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" title="Lien 4">Lien 4</a></li>
+                    </ul>
+                </div>*@
+
+            <label>
+                Taille GOP
+            </label>
+            <input type="text" list="tailleGop" />
             <datalist class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
                 <option value="0">1 image</option>
                 <option value="1">12 images</option>
                 <option value="2">15 images</option>
             </datalist>
-        
 
-        <label>
-            Taille CTU
-        </label>
+
+            <label>
+                Taille CTU
+            </label>
             <select name="CTU" id="selectCTU" class="margin select CTU">
                 <option value="0">64*64 pixels</option>
                 <option value="1" selected>32*32 pixels</option>
                 <option value="2">16*16 pixels</option>
                 <option value="3">8*8 pixels</option>
-            </select> 
-         <br />
-        <label>
-            Enable Wpp
-        </label>
+            </select>
+            <br />
+            <label>
+                Enable Wpp
+            </label>
             <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
-      
-        <label>
-            Enable Qp
-        </label>
-            <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
-         <br />
-       </p>
 
-     <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
+            <label>
+                Enable Qp
+            </label>
+            <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
+            <br />
+        </p>
+
+        <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
         @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
             </div>*@
 
-        }
-</div>
-@{
-    if (Model.isOver)
-    {
-        if (Model.isSuccess)
+    }
+
+    @{
+        if (Model.isOver)
         {
-            <text> Conversion OK Time Elapsed : @Model.Elapsed.Hours:@Model.Elapsed.Minutes:@Model.Elapsed.Seconds </text> if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code : @Model.ExitCode </text>
-        }
-        else
-        {
-            <text> Conversion KO  </text>if (!string.IsNullOrEmpty(Model.CMDconsoleMessage)) {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code: </text>@Model.ExitCode
+            if (Model.isSuccess)
+            {
+                <text> Conversion OK Time Elapsed : @Model.Elapsed.Hours:@Model.Elapsed.Minutes:@Model.Elapsed.Seconds </text> if (!string.IsNullOrEmpty(Model.CMDconsoleMessage))
+                {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code : @Model.ExitCode </text>
+            }
+            else
+            {
+                <text> Conversion KO  </text>if (!string.IsNullOrEmpty(Model.CMDconsoleMessage))
+                {<text> Message : @Model.CMDconsoleMessage </text>} <text> Exit Code: </text>@Model.ExitCode
+            }
         }
     }
-}

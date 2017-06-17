@@ -36,6 +36,7 @@ namespace x265Com.Controllers
         [HttpPost]
         public ActionResult _ConversionPartial(Models.ConversionModel _ConversionModel)
         {
+            
             if (string.IsNullOrEmpty(_ConversionModel.InputFilePathAndName) || string.IsNullOrEmpty(_ConversionModel.OutputFilePathAndName))
             {
                 if(string.IsNullOrEmpty(_ConversionModel.InputFilePathAndName))
