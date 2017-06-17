@@ -96,8 +96,7 @@
             <label>
                 Debit Video
             </label>
-            <input type="text" class="margin debitVideo" name="debitVideo" id="debitVideo" oninput="result4.value=parseInt(d.value)">
-            <output name="result4"></output>
+            <input type="text" class="margin debitVideo" name="debitVideo" id="debitVideo">
             <br />
         </p>
         <h3>Audio</h3> <br />
@@ -172,21 +171,42 @@
                 <option value="3">8*8 pixels</option>
             </select>
             <br />
-            <label>
-                Enable Wpp
+            <label class="mouseover">
+                Enable Wpp <span class="">When enable inscrease the speed of video encoding. Multi thread must be supported by the CPU.</span>
             </label>
             <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
 
-            <label>
-                Enable Qp
-            </label>
-            <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
-            <br />
+            <label class="mouseover">
+                Enable Qp <span class="">Salut</span>
+        </label>
+        <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
+        <br />
         </p>
 
-        <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
+        <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
         @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
             </div>*@
+        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>*@
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Début de l'encodage</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Yeahh!!!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     }
 

@@ -224,6 +224,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\FormulaireStyle4.css" />
     <Content Include="Content\Logo_inaRR.jpg" />
+    <Content Include="Content\MouseOver.css" />
     <Content Include="Content\Watchfolder.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
