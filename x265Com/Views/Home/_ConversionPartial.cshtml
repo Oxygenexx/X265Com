@@ -173,21 +173,49 @@
                         <option value="3">8*8 pixels</option>
                     </select>
                     <br />
-                    <label>
+                    <label href="#" data-toggle="tooltip" title="Accelerate video encoding speed when enabled if multi thread is supported by the CPU">
                         Enable Wpp
                     </label>
                     <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
 
-                    <label>
-                        Enable Qp
+                    <label href="#" data-toggle="tooltip" title="Salut">
+                        Enable Qp 
                     </label>
                     <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
                     <br />
                 </p>
 
-                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
+                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
                 @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
                     </div>*@
+
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">La conversion a commencé</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Salut</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--ToolTip quand mouseOver-->
+        <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+        </script>
 
     }
 
