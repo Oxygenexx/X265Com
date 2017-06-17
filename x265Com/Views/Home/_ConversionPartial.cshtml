@@ -4,42 +4,43 @@
     @using (Ajax.BeginForm("_ConversionPartial", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divConversion" }))
     {
         @Html.AntiForgeryToken()
-        // <form name="ConversionForm" method="post">
-
-
-        <p class="ligne">
-            <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
-            <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
-            <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
-            <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
-        </p>
-        <p class="ligne">
-            <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">
-            <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="RemoveFile">
-        </p>
         <script type="text/javascript">
             function AddFile() {
-                var div = $('<div class="form-group author-input"></div>');
-                var cnt = $('<label for="Author" class="control-label col-md-2">Author</label>');
-                div.append(cnt);
-                cnt = $('<div class="col-md-10"></div>');
-                cnt.append('<input type="text" name="authorList" />');
-                div.append(cnt);
-                div.append('<button class="glyphicon-plus-sign" onclick="addAuthor"></button>');
-                div.append('<button class="glyphicon-minus-sign" onclick="removeAuthor"></button>');
-
-
-                $(this).parent().after(div);
+                var p = $('<p id="FileS" class="ligne"></p>');
+                var cnt = $('<label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>');
+                p.append(cnt);
+                cnt = $('<input type="text" name="InputFilePathAndName" value="" class="ligne" />');
+                p.append(cnt);
+                cnt = $('<label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>');
+                p.append(cnt);
+                cnt = $('<input type="text" name="OutputFilePathAndName" value="" class="ligne" /> <br />');
+                p.append(cnt);
+                /*p.append('<input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">');
+                p.append('<input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="RemoveFile">');*/
+                $(this).parent().after(p);
             }
             function RemoveFile() {
-                if ($('#AuthorSet > div').length > 1)
-                    $('#AuthorSet').remove($(this).parent());
+                if ($('#FileSet > div').length > 1)
+                    $('#FileSet').remove($(this).parent());
                 else
-                    alert("Must have at least one author");
+                    alert("Il doit y avoir au moins un fichier");
             }
         </script>
+        // <form name="ConversionForm" method="post">
 
-        <h3>Vidéo</h3> <br />
+        <div id="FileSet">
+            <p id="FileS" class="ligne">
+                <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
+                <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
+                <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
+                <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
+            </p>
+            <p class="ligne">
+                <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">
+                <input type="button" name="AddFile" value="Supprimer Fichier" class="button margin" onclick="RemoveFile">
+            </p>
+        </div>
+            <h3>Vidéo</h3> <br />
 
         <p class="colonne1">
             <label>
@@ -69,47 +70,48 @@
                 <option value="4">300 fps</option>
             </select>
 
-            <br />
+                <br />
 
-            <label>
-                Video Codec
-            </label>
-            <select name="VideoCodec" id="selectVideoCodec" class="select videoCodec">
-                <option value="0">HEVC</option>
-                <option value="1" selected>h264</option>
-                <option value="2">Mpeg2</option>
-                <option value="3">vp9</option>
-            </select>
-
-
-            <label>
-                Conteneur
-            </label>
-            <select name="Conteneur" id="selectConteneur" class="select Conteneur">
-                <option value="0">.mov</option>
-                <option value="1" selected>.mxf</option>
-                <option value="2">.mp4</option>
-            </select>
+                <label>
+                    Video Codec
+                </label>
+                <select name="VideoCodec" id="selectVideoCodec" class="select videoCodec">
+                    <option value="0">HEVC</option>
+                    <option value="1" selected>h264</option>
+                    <option value="2">Mpeg2</option>
+                    <option value="3">vp9</option>
+                </select>
 
 
+                <label>
+                    Conteneur
+                </label>
+                <select name="Conteneur" id="selectConteneur" class="select Conteneur">
+                    <option value="0">.mov</option>
+                    <option value="1" selected>.mxf</option>
+                    <option value="2">.mp4</option>
+                </select>
 
-            <label>
-                Debit Video
-            </label>
-            <input type="text" class="margin debitVideo" name="debitVideo" id="debitVideo">
-            <br />
-        </p>
-        <h3>Audio</h3> <br />
-        <p class="colonne1">
-            <label>
-                Audio Codec
-            </label>
-            <select name="sAudioCodec" id="selectAudioCodec" class="select audioCodec">
-                <option value="0">mp3</option>
-                <option value="1" selected>wmv</option>
-                <option value="2">pcm</option>
-                <option value="3">aac</option>
-            </select>
+
+
+                <label>
+                    Debit Video
+                </label>
+                <input type="text" class="margin debitVideo" name="debitVideo" id="debitVideo" oninput="result4.value=parseInt(d.value)">
+                <output name="result4"></output>
+                <br />
+            </p>
+                <h3>Audio</h3> <br />
+                <p class="colonne1">
+                    <label>
+                        Audio Codec
+                    </label>
+                    <select name="sAudioCodec" id="selectAudioCodec" class="select audioCodec">
+                        <option value="0">mp3</option>
+                        <option value="1" selected>wmv</option>
+                        <option value="2">pcm</option>
+                        <option value="3">aac</option>
+                    </select>
 
 
             <label>
@@ -137,19 +139,19 @@
                 <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
             </select>
 
-            @*<div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Menu déroulant
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#" title="Lien 1">Lien 1</a></li>
-                        <li><a href="#" title="Lien 2">Lien 2</a></li>
-                        <li><a href="#" title="Lien 3">Lien 3</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#" title="Lien 4">Lien 4</a></li>
-                    </ul>
-                </div>*@
+                    @*<div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Menu déroulant
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#" title="Lien 1">Lien 1</a></li>
+                                <li><a href="#" title="Lien 2">Lien 2</a></li>
+                                <li><a href="#" title="Lien 3">Lien 3</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" title="Lien 4">Lien 4</a></li>
+                            </ul>
+                        </div>*@
 
             <label>
                 Taille GOP
@@ -161,52 +163,31 @@
             </select>
 
 
-            <label>
-                Taille CTU
-            </label>
-            <select name="CTU" id="selectCTU" class="margin select CTU">
-                <option value="0">64*64 pixels</option>
-                <option value="1" selected>32*32 pixels</option>
-                <option value="2">16*16 pixels</option>
-                <option value="3">8*8 pixels</option>
-            </select>
-            <br />
-            <label class="mouseover">
-                Enable Wpp <span class="">When enable inscrease the speed of video encoding. Multi thread must be supported by the CPU.</span>
-            </label>
-            <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
+                    <label>
+                        Taille CTU
+                    </label>
+                    <select name="CTU" id="selectCTU" class="margin select CTU">
+                        <option value="0">64*64 pixels</option>
+                        <option value="1" selected>32*32 pixels</option>
+                        <option value="2">16*16 pixels</option>
+                        <option value="3">8*8 pixels</option>
+                    </select>
+                    <br />
+                    <label>
+                        Enable Wpp
+                    </label>
+                    <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
 
-            <label class="mouseover">
-                Enable Qp <span class="">Salut</span>
-        </label>
-        <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
-        <br />
-        </p>
+                    <label>
+                        Enable Qp
+                    </label>
+                    <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
+                    <br />
+                </p>
 
-        <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-        @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
-            </div>*@
-        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>*@
-        <!-- Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Début de l'encodage</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Yeahh!!!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
+                @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
+                    </div>*@
 
     }
 
@@ -225,3 +206,5 @@
             }
         }
     }
+</div>
+

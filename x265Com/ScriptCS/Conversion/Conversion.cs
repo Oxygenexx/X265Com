@@ -70,7 +70,7 @@ namespace x265Com.ScriptCS
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
-            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg " + "-thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 " + "-i " +  InFilePath + @"\" + InFileName + " ");
+            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 -i " +  InFilePath + @"\" + InFileName + " ");
             cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
             _cmdStringBuilder.Append("-r " + cadenceImage + " ");
             _cmdStringBuilder.Append(getResolutionCommandString());
@@ -98,31 +98,32 @@ namespace x265Com.ScriptCS
         {
             
             _cmdstring = "/C " + _cmdstring;
-            Process process = new Process();
+            Process _process = new Process();
             //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = _cmdstring;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.Verb = "runas";
+            _process.StartInfo.FileName = "cmd.exe";
+            _process.StartInfo.Arguments = _cmdstring;
+            _process.StartInfo.UseShellExecute = false;
+            _process.StartInfo.RedirectStandardOutput = true;
+            _process.StartInfo.RedirectStandardError = true;
+            _process.StartInfo.Verb = "runas";
             logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+            System.IO.File.AppendAllText(logErrorPath, _cmdstring + "\n");
             //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
-            process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
+            _process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
             //process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
-            process.Start();
-            process.BeginErrorReadLine();
+            _process.Start();
+            _process.BeginErrorReadLine();
             //process.BeginOutputReadLine();
-            string output = process.StandardOutput.ReadToEnd();
+            string output = _process.StandardOutput.ReadToEnd();
             //Console.WriteLine(output);
             string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
             //File.AppendAllText(_LogPath, appendText);
             if(!string.IsNullOrEmpty(output))
                 System.IO.File.WriteAllText(_LogPath, output);
             //Tools.WriteErrorInXml(output);
-            process.WaitForExit();
-            return process.ExitCode;
+            _process.WaitForExit();
+            return _process.ExitCode;
         }
 
         void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)

@@ -1,0 +1,34 @@
+<script type="text/javascript">
+            function AddFile() {
+                var p = $('<p id="FileS" class="ligne"></p>');
+                var cnt = $('<label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>');
+                p.append(cnt);
+                cnt = $('<input type="text" name="InputFilePathAndName" value="" class="ligne" />');
+                p.append(cnt);
+                cnt = $('<label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>');
+                p.append(cnt);
+                cnt = $('<input type="text" name="OutputFilePathAndName" value="" class="ligne" /> <br />');
+                p.append(cnt);
+                /*p.append('<input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">');
+                p.append('<input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="RemoveFile">');*/
+                $(this).parent().after(p);
+            }
+            function RemoveFile() {
+                if ($('#FileSet > div').length > 1)
+                    $('#FileSet').remove($(this).parent());
+                else
+                    alert("Il doit y avoir au moins un fichier");
+            }
+        </script>
+        <div id="FileSet">
+            <p id="FileS" class="ligne">
+                <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
+                <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
+                <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
+                <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
+            </p>
+            <p class="ligne">
+                <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">
+                <input type="button" name="AddFile" value="Supprimer Fichier" class="button margin" onclick="RemoveFile">
+            </p>
+        </div>
