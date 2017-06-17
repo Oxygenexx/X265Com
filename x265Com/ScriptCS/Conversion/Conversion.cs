@@ -42,7 +42,7 @@ namespace x265Com.ScriptCS
             bool _inFileExists = Tools.CheckIfFileExists(InFileName, InFilePath);
             if (!_inFileExists)
             {
-                _message = "Fichier d'entrée inexistant";
+                _message = "Fichier d'entrée inexistant : "+ InFilePath+ InFileName;
                 return _isSuccess;
             }
             #endregion
@@ -51,7 +51,7 @@ namespace x265Com.ScriptCS
             bool _outDirectoryExists = Tools.CheckIfDirectoryExists(OutFilePath);
             if (!_outDirectoryExists)
             {
-                _message = "Dossier de sortie inexistant";
+                _message = "Dossier de sortie inexistant : "+ OutFilePath;
                 return _isSuccess;
             }
             #endregion
