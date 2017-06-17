@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Models\ConversionModel.cs" />
+    <Compile Include="Models\FilesConversionModel.cs" />
     <Compile Include="Models\WatchFolderModel.cs" />
     <Compile Include="ScriptCS\Conversion\Conversion.cs" />
     <Compile Include="Global.asax.cs">
@@ -293,6 +294,7 @@
     <Content Include="Views\WatchFolder\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Home\_ConversionPartial.cshtml" />
+    <Content Include="Views\WatchFolder\_BundleConversion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

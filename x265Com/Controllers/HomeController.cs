@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using x265Com.ScriptCS;
 
 namespace x265Com.Controllers
 {
@@ -51,24 +52,30 @@ namespace x265Com.Controllers
             string _InputFileName = "";
             string _InputFilepath = "";
             int index = _ConversionModel.InputFilePathAndName.LastIndexOf(@"\");
-            _InputFileName = ScriptCS.Tools.GetFileName(_ConversionModel.InputFilePathAndName, index);
-            _InputFilepath = ScriptCS.Tools.GetFilePath(_ConversionModel.InputFilePathAndName, index);
+            _InputFileName = Tools.GetFileName(_ConversionModel.InputFilePathAndName, index);
+            _InputFilepath = Tools.GetFilePath(_ConversionModel.InputFilePathAndName, index);
             string _OutputFileName = "";
             string _OutputFilepath = "";
             index = _ConversionModel.OutputFilePathAndName.LastIndexOf(@"\");
-            _OutputFileName = ScriptCS.Tools.GetFileName(_ConversionModel.OutputFilePathAndName, index);
-            _OutputFilepath = ScriptCS.Tools.GetFilePath(_ConversionModel.OutputFilePathAndName, index);
+            _OutputFileName = Tools.GetFileName(_ConversionModel.OutputFilePathAndName, index);
+            _OutputFilepath = Tools.GetFilePath(_ConversionModel.OutputFilePathAndName, index);
 
-            ScriptCS.ConversionInfo _ConversionInfo = new ScriptCS.ConversionInfo()
+            ConversionInfo _ConversionInfo = new ConversionInfo()
             {
                 InFilePath = _InputFilepath,
                 InFileName = _InputFileName,
                 OutFilePath = _OutputFilepath,
                 OutFileName = _OutputFileName,
-                cadenceImage = _ConversionModel.cadenceImage,
-                VideoCodec = (ScriptCS.ConversionInfo.videoCodecEnum)_ConversionModel.VideoCodec,
-                DefImage = _ConversionModel.DefImage,
-                perfOption = (ScriptCS.ConversionInfo.perfOptionEnum)_ConversionModel.perfOption,
+                cadenceImage = (cadenceImageEnum)_ConversionModel.cadenceImage,
+                VideoCodec = (videoCodecEnum)_ConversionModel.VideoCodec,
+                DefImage = (defImageEnum)_ConversionModel.DefImage,
+                perfOption = (perfOptionEnum)_ConversionModel.perfOption,
+                AudioCodec = (audioCodecEnum)_ConversionModel.AudioCodec,
+                debitAudio = _ConversionModel.debitAudio,
+                debitVideo = _ConversionModel.debitVideo,
+                quantizerParameter = _ConversionModel.quantizerParameter,
+                isQP = _ConversionModel.isQP,
+                isLossless = _ConversionModel.isLossless,
                 isWpp = _ConversionModel.isWpp
             };
 
