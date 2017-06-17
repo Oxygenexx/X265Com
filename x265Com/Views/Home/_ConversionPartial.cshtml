@@ -32,7 +32,7 @@
             <p id="FileS" class="ligne">
                 <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
                 <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
-                <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
+                <label for="OutputFilePathAndName" class="ligne" href="#" data-toggle="tooltip" title="Indiquer l'extension du fichier de sortie'">Chemin et nom de la vidéo de sortie:</label>
                 <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
             </p>
             <p class="ligne">
@@ -40,7 +40,7 @@
                 <input type="button" name="AddFile" value="Supprimer Fichier" class="button margin" onclick="RemoveFile">
             </p>
         </div>
-            <h3>Vidéo</h3> <br />
+            <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages vidéos">Vidéo</h3> <br />
 
         <p class="colonne1">
             <label>
@@ -101,7 +101,7 @@
                 <output name="result4"></output>
                 <br />
             </p>
-                <h3>Audio</h3> <br />
+                <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages audios">Audio</h3> <br />
                 <p class="colonne1">
                     <label>
                         Audio Codec
@@ -120,7 +120,7 @@
             <input type="text" class="text margin debitAudio" name="debitAudio" id="debitAudio" oninput="result4.value=parseInt(d.value)">
             <output name="result4"></output>
         </p>
-        <h3>Paramètre de l'encodeur</h3> <br />
+        <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section des paramètres techniques d'encodage">Paramètre de l'encodeur</h3> <br />
         <p class="colonne1">
             <label>
                 Performance Option
@@ -185,7 +185,7 @@
                     <br />
                 </p>
 
-                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                <input type="submit" name="BeginConversionButton" value="Conversion" @*class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"*@>
                 @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
                     </div>*@
 
