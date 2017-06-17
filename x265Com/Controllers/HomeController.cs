@@ -36,6 +36,17 @@ namespace x265Com.Controllers
         [HttpPost]
         public ActionResult _ConversionPartial(Models.ConversionModel _ConversionModel)
         {
+            if (string.IsNullOrEmpty(_ConversionModel.InputFilePathAndName) || string.IsNullOrEmpty(_ConversionModel.OutputFilePathAndName))
+            {
+                if(string.IsNullOrEmpty(_ConversionModel.InputFilePathAndName))
+                    _ConversionModel.CMDconsoleMessage = "Entrez un nom de fichier d'entré";
+                if (string.IsNullOrEmpty(_ConversionModel.OutputFilePathAndName))
+                    _ConversionModel.CMDconsoleMessage = "Entrez un nom de fichier de sortie";
+                _ConversionModel.isOver = true;
+                _ConversionModel.ExitCode = 1;
+                _ConversionModel.Elapsed = System.TimeSpan.FromMinutes(0);
+                return PartialView("_ConversionPartial", _ConversionModel);
+            }
             string _InputFileName = "";
             string _InputFilepath = "";
             int index = _ConversionModel.InputFilePathAndName.LastIndexOf(@"\");
