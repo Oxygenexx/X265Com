@@ -45,29 +45,29 @@
             <label>
                 Definition Image
             </label>
-            <input type="text" list="defImage" />
-            <datalist name="defImage" id="defImage" class="defImage">
+            <select name="defImage" id="defImage" class="defImage">
                 <option value="0" @(Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
                 <option value="1" @(Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
                 <option value="2" @(Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
                 <option value="3" @(Model.DefImage == 3 ? "selected" : "")>1270*720</option>
+                <option disabled>-----------</option>
                 <option value="4" @(Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
                 <option value="5" @(Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
                 <option value="6" @(Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
                 <option value="7" @(Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
-            </datalist>
+            </select>
 
             <label>
                 Cadence Image
             </label>
-            <input type="text" list="cadenceImage" />
-            <datalist type="text" class="range, margin" name="cadenceImage" id="cadenceImage" value="@(Model.cadenceImage != 0 ? Model.cadenceImage : 25)">
-                <option>25 fps</option>
-                <option>50 fps</option>
-                <option>60 fps</option>
-                <option>100 fps</option>
-                <option>300 fps</option>
-            </datalist>
+            <select type="text" class="range, margin" name="cadenceImage" id="cadenceImage" value="@(Model.cadenceImage != 0 ? Model.cadenceImage : 25)">
+                <option value="0">25 fps</option>
+                <option value="1">50 fps</option>
+                <option value="2" selected>60 fps</option>
+                <option disabled>-----------</option>
+                <option value="3">100 fps</option>
+                <option value="4">300 fps</option>
+            </select>
 
             <br />
 
@@ -130,7 +130,7 @@
                 <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
                 <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
                 <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
-                <li role="separator" class="divider"></li>
+                <option disabled>-----------</option>
                 <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
                 <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
                 <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
@@ -155,12 +155,11 @@
             <label>
                 Taille GOP
             </label>
-            <input type="text" list="tailleGop" />
-            <datalist class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
+            <select class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
                 <option value="0">1 image</option>
                 <option value="1">12 images</option>
                 <option value="2">15 images</option>
-            </datalist>
+            </select>
 
 
             <label>
