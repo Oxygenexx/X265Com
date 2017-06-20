@@ -4,31 +4,42 @@ using System.Text;
 
 namespace x265Com.ScriptCS
 {
+    #region Enums
+    public enum defImageEnum { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
+    public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
+    public enum CTUEnum { c64, c32, c16, c8 }
+    //public enum conteneur { mov, mxf, mp4 }
+    public enum videoCodecEnum { HEVC, h264, Mpeg2, vp9 }
+    public enum audioCodecEnum { aac, mp3, flac, pcm }
+    public enum cadenceImageEnum { fps25, fps50, fps60, fps100, fps300 }
+    #endregion
     public class ConversionInfo
     {
+        #region Propriétés
         public string InFilePath { get; set; }
         public string InFileName { get; set; }
         public string OutFilePath { get; set; }
         public string OutFileName { get; set; }
-        public int cadenceImage { get; set; }
-        public bool isWpp { get; set; }
-        public enum defImage { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
-        public int DefImage { get; set; }
-        public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
+        public cadenceImageEnum cadenceImage { get; set; }
+        public defImageEnum DefImage { get; set; }
         public perfOptionEnum perfOption { get; set; }
-        public int CTU { get; set; }
-        public enum conteneur { mov, mxf, mp4 }
-        public int Conteneur { get; set; }
-        public enum videoCodecEnum { HEVC, h264, Mpeg2, vp9 }
+        public CTUEnum CTU { get; set; }
+        //public conteneur Conteneur { get; set; }
         public videoCodecEnum VideoCodec { get; set; }
-        public int debitVideo { get; set; }
-        public int tailleGop { get; set; }
-        public bool isQP { get; set; }
-        public enum audioCodecEnum { mp3, wmv, pcm, aac }
         public audioCodecEnum AudioCodec { get; set; }
         public int debitAudio { get; set; }
+        public int debitVideo { get; set; }
+        public int tailleGop { get; set; }
+        public int quantizerParameter { get; set; }
+        public bool isQP { get; set; }
+        public bool isLossless { get; set; }
+        public bool isWpp { get; set; }
+
+        #region Exe
         public string logErrorPath { get; set; }
         public string logDataPath { get; set; }
+        #endregion
+        #endregion
 
         public bool StartConversion(out int _exitCode, out TimeSpan _Elapsed, out string _message)
         {
@@ -42,7 +53,7 @@ namespace x265Com.ScriptCS
             bool _inFileExists = Tools.CheckIfFileExists(InFileName, InFilePath);
             if (!_inFileExists)
             {
-                _message = "Fichier d'entrée inexistant : "+ InFilePath+ InFileName;
+                _message = "Fichier d'entrée inexistant : " + InFilePath + InFileName;
                 return _isSuccess;
             }
             #endregion
@@ -51,7 +62,7 @@ namespace x265Com.ScriptCS
             bool _outDirectoryExists = Tools.CheckIfDirectoryExists(OutFilePath);
             if (!_outDirectoryExists)
             {
-                _message = "Dossier de sortie inexistant : "+ OutFilePath;
+                _message = "Dossier de sortie inexistant : " + OutFilePath;
                 return _isSuccess;
             }
             #endregion
@@ -59,22 +70,32 @@ namespace x265Com.ScriptCS
             _CMDConversionStr = BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
+
             DateTime _Begin = DateTime.Now;
-            _exitCode = LaunchCMDCommand(_CMDConversionStr);            
+            _exitCode = LaunchCMDCommand(_CMDConversionStr);
             _Elapsed = DateTime.Now - _Begin;
+
             if (_exitCode == 0)
                 _isSuccess = true;
             return _isSuccess;
         }
-        
+
+        /// <summary>
+        /// Fonction qui construit la commande FFMPEG à executer
+        /// </summary>
+        /// <returns></returns>
         public string BuildConversionString()
         {
             //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
-            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 -i " +  InFilePath + @"\" + InFileName + " ");
-            cadenceImage = cadenceImage == 0 ? 1 : cadenceImage;
-            _cmdStringBuilder.Append("-r " + cadenceImage + " ");
+            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 -i " + InFilePath + @"\" + InFileName + " ");
+            _cmdStringBuilder.Append(getCadenceImage());
             _cmdStringBuilder.Append(getResolutionCommandString());
             _cmdStringBuilder.Append(getVideoCodec());
+            _cmdStringBuilder.Append(getQP());
+            _cmdStringBuilder.Append(getDebitVideo());
+            _cmdStringBuilder.Append(getAudioCodec());
+            _cmdStringBuilder.Append(getDebitAudio());
+            //_cmdStringBuilder.Append(getCTU());
             //if (isWpp)
             //{
             //    _cmdStringBuilder.Append("-wpp:1 ");
@@ -85,10 +106,11 @@ namespace x265Com.ScriptCS
             //}
             _cmdStringBuilder.Append(getPresetCommandString());
 
-            _cmdStringBuilder.Append(" -y "+OutFilePath + @"\" + OutFileName);
+            _cmdStringBuilder.Append(" -y " + OutFilePath + @"\" + OutFileName);
 
             return _cmdStringBuilder.ToString();
         }
+
         /// <summary>
         /// Fonction qui lance une commande CMD à partir d'une string et log les erreurs reçus
         /// </summary>
@@ -96,7 +118,7 @@ namespace x265Com.ScriptCS
         /// <returns></returns>
         public int LaunchCMDCommand(string _cmdstring)
         {
-            
+
             _cmdstring = "/C " + _cmdstring;
             Process _process = new Process();
             //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -119,7 +141,7 @@ namespace x265Com.ScriptCS
             //Console.WriteLine(output);
             string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
             //File.AppendAllText(_LogPath, appendText);
-            if(!string.IsNullOrEmpty(output))
+            if (!string.IsNullOrEmpty(output))
                 System.IO.File.WriteAllText(_LogPath, output);
             //Tools.WriteErrorInXml(output);
             _process.WaitForExit();
@@ -128,61 +150,61 @@ namespace x265Com.ScriptCS
 
         void OutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
             //Tools.WriteErrorInXml(outLine.Data);
             //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
             //System.IO.File.WriteAllText(_LogPath, outLine.Data);
-            System.IO.File.AppendAllText(logDataPath, outLine.Data+"\n");
+            System.IO.File.AppendAllText(logDataPath, outLine.Data + "\n");
             //if(outLine.Data.Contains(""))
             //Console.WriteLine(outLine.Data);
         }
 
         void OutputErrorHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
             //Tools.WriteErrorInXml(outLine.Data);
             //string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
-           // System.IO.File.WriteAllText(_LogPath, outLine.Data);
-            System.IO.File.AppendAllText(logErrorPath, outLine.Data+"\n");
+            // System.IO.File.WriteAllText(_LogPath, outLine.Data);
+            System.IO.File.AppendAllText(logErrorPath, outLine.Data + "\n");
             //Console.WriteLine(outLine.Data);
         }
 
         public string getResolutionCommandString()
         {
-            string _resolutionCMDLine = "-vf scale=";
+            string _resolutionCMDLine = "";
+
+            _resolutionCMDLine = "-vf scale=";
             switch (DefImage)
             {
-                case (int)defImage.UHD_3840x2160:
+                case defImageEnum.UHD_3840x2160:
                     {
                         _resolutionCMDLine += "3840:2160 ";
                         break;
                     }
-                case (int)defImage.HD_1920x1080:
+                case defImageEnum.HD_1920x1080:
                     {
                         _resolutionCMDLine += "1920:1080 ";
                         break;
                     }
-                case (int)defImage.HD_1440x1080:
+                case defImageEnum.HD_1440x1080:
                     {
                         _resolutionCMDLine += "1440:1080 ";
                         break;
                     }
-                case (int)defImage.HD_1270x720:
+                case defImageEnum.HD_1270x720:
                     {
                         _resolutionCMDLine += "1270:720 ";
                         break;
                     }
-                case (int)defImage.Proxy_480p:
+                case defImageEnum.Proxy_480p:
                     {
                         _resolutionCMDLine += "854:480 ";
                         break;
                     }
-                case (int)defImage.Proxy_360p:
+                case defImageEnum.Proxy_360p:
                     {
                         _resolutionCMDLine += "640:360 ";
                         break;
                     }
-                case (int)defImage.Proxy_240p:
+                case defImageEnum.Proxy_240p:
                     {
                         _resolutionCMDLine += "426:240 ";
                         break;
@@ -193,40 +215,195 @@ namespace x265Com.ScriptCS
                         break;
                     }
             }
+
+
             return _resolutionCMDLine;
         }
+
         public string getVideoCodec()
         {
             string _VideoCodecLine = "";
-            switch (VideoCodec)
+            if (!isLossless)
             {
-                case videoCodecEnum.HEVC:
+                switch (VideoCodec)
+                {
+                    case videoCodecEnum.HEVC:
+                        {
+                            _VideoCodecLine = "-c:v libx265 ";
+                            break;
+                        }
+                    case videoCodecEnum.h264:
+                        {
+                            _VideoCodecLine = "-c:v libx264 ";
+                            break;
+                        }
+                    case videoCodecEnum.Mpeg2:
+                        {
+                            _VideoCodecLine = "-c:v mpeg2video ";
+                            break;
+                        }
+                    case videoCodecEnum.vp9:
+                        {
+                            _VideoCodecLine = "-c:v libvpx-vp9 ";
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                _VideoCodecLine = "-c:v rawvideo";
+            }
+
+            return _VideoCodecLine;
+        }
+
+        public string getAudioCodec()
+        {
+            string _AudioCodecLine = "";
+            switch (AudioCodec)
+            {
+                case audioCodecEnum.aac:
                     {
-                        _VideoCodecLine = "-c:v libx265 ";
+                        _AudioCodecLine = "-acodec aac ";
                         break;
                     }
-                case videoCodecEnum.h264:
+                case audioCodecEnum.mp3:
                     {
-                        _VideoCodecLine = "";
+                        _AudioCodecLine = "-acodec libmp3lame ";
                         break;
                     }
-                case videoCodecEnum.Mpeg2:
+                case audioCodecEnum.pcm:
                     {
-                        _VideoCodecLine = "-c:v mpeg2video ";
+                        //_AudioCodecLine = "-c:v mpeg2video ";
                         break;
                     }
-                case videoCodecEnum.vp9:
+                case audioCodecEnum.flac:
                     {
-                        _VideoCodecLine = "-c:v libvpx-vp9 ";
+                        _AudioCodecLine = "-acodec flac ";
                         break;
                     }
             }
-            return _VideoCodecLine;
+            return _AudioCodecLine;
         }
+
+        public string getCTU()
+        {
+            string _CTU = "";
+            switch (CTU)
+            {
+                case CTUEnum.c64:
+                    {
+                        _CTU = "-CTU=64 ";
+                        break;
+                    }
+                case CTUEnum.c32:
+                    {
+                        _CTU = "-CTU=32 ";
+                        break;
+                    }
+                case CTUEnum.c16:
+                    {
+                        _CTU = "-CTU=16 ";
+                        break;
+                    }
+                case CTUEnum.c8:
+                    {
+                        _CTU = "-CTU=8 ";
+                        break;
+                    }
+            }
+            return _CTU;
+        }
+
+        public string getQP()
+        {
+            string _QP = "";
+            if (isQP)
+            {
+                if (quantizerParameter > 51)
+                {
+                    quantizerParameter = 51;
+                }
+                else
+                {
+                    if (quantizerParameter < 0)
+                    {
+                        quantizerParameter = 0;
+                    }
+                }
+                if (VideoCodec == videoCodecEnum.h264)
+                {
+                    _QP = "-x264-params qp=" + quantizerParameter + " ";
+                }
+                else
+                {
+                    if (VideoCodec == videoCodecEnum.HEVC)
+                    {
+                        _QP = "-x265-params qp=" + quantizerParameter + " ";
+                    }
+                }
+            }
+
+            return _QP;
+        }
+
         public string getPresetCommandString()
         {
-            string _presetCMDLine =  "-preset " + perfOption.ToString() + " ";
+            string _presetCMDLine = "-preset " + perfOption.ToString() + " ";
             return _presetCMDLine;
+        }
+
+        public string getDebitAudio()
+        {
+            string _presetDebitAudio = "";
+            if (debitAudio != 0)
+            {
+                _presetDebitAudio = "-b:a " + (debitAudio * 1000).ToString() + " ";
+            }
+            return _presetDebitAudio;
+        }
+
+        public string getDebitVideo()
+        {
+            string _presetDebitVideo = "";
+            if (debitVideo != 0)
+            {
+                _presetDebitVideo = "-b:v " + (debitVideo * 1000).ToString() + " ";
+            }
+            return _presetDebitVideo;
+        }
+        public string getCadenceImage()
+        {
+            string _cadenceImage = "-r ";
+            switch (cadenceImage)
+            {
+                case cadenceImageEnum.fps25:
+                    {
+                        _cadenceImage = _cadenceImage + "25 ";
+                        break;
+                    }
+                case cadenceImageEnum.fps50:
+                    {
+                        _cadenceImage = _cadenceImage + "50 ";
+                        break;
+                    }
+                case cadenceImageEnum.fps60:
+                    {
+                        _cadenceImage = _cadenceImage + "60 ";
+                        break;
+                    }
+                case cadenceImageEnum.fps100:
+                    {
+                        _cadenceImage = _cadenceImage + "100 ";
+                        break;
+                    }
+                case cadenceImageEnum.fps300:
+                    {
+                        _cadenceImage = _cadenceImage + "300 ";
+                        break;
+                    }
+            }
+            return _cadenceImage;
         }
     }
 }

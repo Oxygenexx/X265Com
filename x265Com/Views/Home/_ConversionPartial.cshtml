@@ -32,43 +32,43 @@
             <p id="FileS" class="ligne">
                 <label for="InputFilePathAndName" class="ligne">Chemin et nom de la vidéo à convertir:</label>
                 <input type="text" name="InputFilePathAndName" value="@(Model != null ? Model.InputFilePathAndName : "")" class="ligne" />
-                <label for="OutputFilePathAndName" class="ligne" href="#" data-toggle="tooltip" title="Indiquer l'extension du fichier de sortie'">Chemin et nom de la vidéo de sortie:</label>
+                <label for="OutputFilePathAndName" class="ligne">Chemin et nom de la vidéo de sortie:</label>
                 <input type="text" name="OutputFilePathAndName" value="@(Model != null ? Model.OutputFilePathAndName : "")" class="ligne" /> <br />
             </p>
-            <p class="ligne">
+            <!--<p class="ligne">
                 <input type="button" name="AddFile" value="Ajouter Fichier" class="button margin" onclick="AddFile">
                 <input type="button" name="AddFile" value="Supprimer Fichier" class="button margin" onclick="RemoveFile">
-            </p>
+            </p>-->
         </div>
-            <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages vidéos">Vidéo</h3> <br />
+        <h3>Vidéo</h3> <br />
 
-        <p class="colonne1">
-            <label>
-                Definition Image
-            </label>
-            <select name="defImage" id="defImage" class="defImage">
-                <option value="0" @(Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
-                <option value="1" @(Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
-                <option value="2" @(Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
-                <option value="3" @(Model.DefImage == 3 ? "selected" : "")>1270*720</option>
-                <option disabled>-----------</option>
-                <option value="4" @(Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
-                <option value="5" @(Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
-                <option value="6" @(Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
-                <option value="7" @(Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
-            </select>
+            <p class="colonne1">
+                <label>
+                    Definition Image
+                </label>
+                <select name="defImage" id="defImage" class="defImage">
+                    <option value="0" @(Model.DefImage == 0 ? "selected" : "")>UHD - 3840*2160</option>
+                    <option value="1" @(Model.DefImage == 1 ? "selected" : "")>HD - 1920*1080</option>
+                    <option value="2" @(Model.DefImage == 2 ? "selected" : "")>HD - 1440*1080</option>
+                    <option value="3" @(Model.DefImage == 3 ? "selected" : "")>1270*720</option>
+                    <option disabled>-----------</option>
+                    <option value="4" @(Model.DefImage == 4 ? "selected" : "")>Proxy - 480p</option>
+                    <option value="5" @(Model.DefImage == 5 ? "selected" : "")>Proxy - 360p</option>
+                    <option value="6" @(Model.DefImage == 6 ? "selected" : "")>Proxy - 240p</option>
+                    <option value="7" @(Model.DefImage == 7 ? "selected" : "")>Proxy - 144p</option>
+                </select>
 
-            <label>
-                Cadence Image
-            </label>
-            <select type="text" class="range, margin" name="cadenceImage" id="cadenceImage" value="@(Model.cadenceImage != 0 ? Model.cadenceImage : 25)">
-                <option value="0">25 fps</option>
-                <option value="1">50 fps</option>
-                <option value="2" selected>60 fps</option>
-                <option disabled>-----------</option>
-                <option value="3">100 fps</option>
-                <option value="4">300 fps</option>
-            </select>
+                <label>
+                    Cadence Image
+                </label>
+                <select type="text" class="range, margin" name="cadenceImage" id="cadenceImage">
+                    <option value="0" @(Model.cadenceImage == 0 ? "selected" : "")>25 fps</option>
+                    <option value="1" @(Model.cadenceImage == 1 ? "selected" : "")>50 fps</option>
+                    <option value="2" @(Model.cadenceImage == 2 ? "selected" : "")>60 fps</option>
+                    <option disabled>-----------</option>
+                    <option value="3" @(Model.cadenceImage == 3 ? "selected" : "")>100 fps</option>
+                    <option value="4" @(Model.cadenceImage == 4 ? "selected" : "")>300 fps</option>
+                </select>
 
                 <br />
 
@@ -76,21 +76,24 @@
                     Video Codec
                 </label>
                 <select name="VideoCodec" id="selectVideoCodec" class="select videoCodec">
-                    <option value="0">HEVC</option>
-                    <option value="1" selected>h264</option>
-                    <option value="2">Mpeg2</option>
-                    <option value="3">vp9</option>
+                    <option value="0" @(Model.VideoCodec == 0 ? "selected" : "")>HEVC</option>
+                    <option value="1" @(Model.VideoCodec == 1 ? "selected" : "")>h264</option>
+                    <option value="2" @(Model.VideoCodec == 2 ? "selected" : "")>Mpeg2</option>
+                    <option value="3" @(Model.VideoCodec == 3 ? "selected" : "")>vp9</option>
                 </select>
 
 
+                <!-- 17/06/2017  VM : Dans l'état actuel des choses, l'utilisateur choisi le conteneur en renseignant l'extension du fichier de sortie 
+                (d'ailleurs il n'y a pas de protection si il rentre un type de fichier invalide)
                 <label>
                     Conteneur
                 </label>
                 <select name="Conteneur" id="selectConteneur" class="select Conteneur">
-                    <option value="0">.mov</option>
-                    <option value="1" selected>.mxf</option>
-                    <option value="2">.mp4</option>
+                    <option value="0" >.mov</option>
+                    <option value="1" >.mxf</option>
+                    <option value="2" >.mp4</option>
                 </select>
+                    -->
 
 
 
@@ -101,43 +104,43 @@
                 <output name="result4"></output>
                 <br />
             </p>
-                <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages audios">Audio</h3> <br />
+            <h3>Audio</h3> <br />
                 <p class="colonne1">
                     <label>
                         Audio Codec
                     </label>
-                    <select name="sAudioCodec" id="selectAudioCodec" class="select audioCodec">
-                        <option value="0">mp3</option>
-                        <option value="1" selected>wmv</option>
-                        <option value="2">pcm</option>
-                        <option value="3">aac</option>
+                    <select name="AudioCodec" id="selectAudioCodec" class="select audioCodec">
+                        <option value="0" @(Model.AudioCodec == 0 ? "selected" : "")>aac</option>
+                        <option value="1" @(Model.AudioCodec == 1 ? "selected" : "")>mp3</option>
+                        <option value="2" @(Model.AudioCodec == 2 ? "selected" : "")>flac</option>
+                        <!--VM: pas trouvé sur ffmpeg<option value="3" >pcm</option>-->
                     </select>
 
 
-            <label>
-                Debit Audio
-            </label>
-            <input type="text" class="text margin debitAudio" name="debitAudio" id="debitAudio" oninput="result4.value=parseInt(d.value)">
-            <output name="result4"></output>
-        </p>
-        <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section des paramètres techniques d'encodage">Paramètre de l'encodeur</h3> <br />
-        <p class="colonne1">
-            <label>
-                Performance Option
-            </label>
-            <select id="perfOption" name="perfOption" class="select">
-                <option value="0" @(Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
-                <option value="1" @(Model.perfOption == 1 ? "selected" : "")>superfast</option>
-                <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
-                <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
-                <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
-                <option disabled>-----------</option>
-                <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
-                <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
-                <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
-                <option value="8" @(Model.perfOption == 8 ? "selected" : "")>veryslow</option>
-                <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
-            </select>
+                    <label>
+                        Debit Audio
+                    </label>
+                    <input type="text" class="text margin debitAudio" name="debitAudio" id="debitAudio" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+                </p>
+                <h3>Paramètres de l'encodeur</h3> <br />
+                <p class="colonne1">
+                    <label>
+                        Performance Option
+                    </label>
+                    <select id="perfOption" name="perfOption" class="select">
+                        <option value="0" @(Model.perfOption == 0 ? "selected" : "")>ultrafast</option>
+                        <option value="1" @(Model.perfOption == 1 ? "selected" : "")>superfast</option>
+                        <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
+                        <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
+                        <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
+                        <option disabled>-----------</option>
+                        <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
+                        <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
+                        <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
+                        <option value="8" @(Model.perfOption == 8 ? "selected" : "")>veryslow</option>
+                        <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
+                    </select>
 
                     @*<div class="dropdown">
                             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -153,69 +156,53 @@
                             </ul>
                         </div>*@
 
-            <label>
-                Taille GOP
-            </label>
-            <select class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
-                <option value="0">1 image</option>
-                <option value="1">12 images</option>
-                <option value="2">15 images</option>
-            </select>
+                    <label>
+                        Taille GOP
+                    </label>
+                    <select class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
+                        <option value="0" @(Model.tailleGop == 0 ? "selected" : "")>1 image</option>
+                        <option value="1" @(Model.tailleGop == 1 ? "selected" : "")>12 images</option>
+                        <option value="2" @(Model.tailleGop == 2 ? "selected" : "")>15 images</option>
+                    </select>
 
 
                     <label>
                         Taille CTU
                     </label>
                     <select name="CTU" id="selectCTU" class="margin select CTU">
-                        <option value="0">64*64 pixels</option>
-                        <option value="1" selected>32*32 pixels</option>
-                        <option value="2">16*16 pixels</option>
-                        <option value="3">8*8 pixels</option>
+                        <option value="0" @(Model.CTU == 0 ? "selected" : "")>64*64 pixels</option>
+                        <option value="1" @(Model.CTU == 1 ? "selected" : "")>32*32 pixels</option>
+                        <option value="2" @(Model.CTU == 2 ? "selected" : "")>16*16 pixels</option>
+                        <option value="3" @(Model.CTU == 3 ? "selected" : "")>8*8 pixels</option>
                     </select>
                     <br />
-                    <label href="#" data-toggle="tooltip" title="Accelerate video encoding speed when enabled if multi thread is supported by the CPU">
-                        Enable Wpp
+
+                    <label>
+                        Quantizer Parameter
+                    </label>
+                    <input type="text" class="text margin debitAudio" name="quantizerParameter" id="quantizerParameter" oninput="result4.value=parseInt(d.value)">
+                    <output name="result4"></output>
+
+                    <label>
+                        Activer le Wpp
                     </label>
                     <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
 
-                    <label href="#" data-toggle="tooltip" title="Salut">
-                        Enable Qp 
+                    <label>
+                        Activer le Qp
                     </label>
                     <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
+
+                    <label>
+                        Activer le lossless
+                    </label>
+                    <input type="checkbox" name="isLossless" id="Losslesscbox" value="Lossless" class="margin wpp">
                     <br />
                 </p>
 
-                <input type="submit" name="BeginConversionButton" value="Conversion" @*class="button margin btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"*@>
+                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
                 @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
                     </div>*@
-
-        <!-- Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">La conversion a commencé</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Salut</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!--ToolTip quand mouseOver-->
-        <script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-        </script>
 
     }
 

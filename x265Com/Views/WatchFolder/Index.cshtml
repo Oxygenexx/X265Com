@@ -13,21 +13,22 @@
 <div>
     <table>
         <tr>
+            <th>Convertir</th>
             <th>File Name</th>
             <th>File Type</th>
-            <th>Length</th>
+            <th>Length</th><!--
             <th>Job Progress</th>
             <th>Job State</th>
             <th>Job Duration</th>
             <th>Output File</th>
-            <th>View File</th>
+            <th>View File</th>-->
         </tr>
         @foreach (x265Com.Models.FileModel _File in Model.FileModels)
         {
             <tr>
                 <td>@_File.FileName</td>
                 <td>@_File.FileType</td>
-                <td>@_File.FileLength</td>
+                <td>@_File.FileLength</td><!--
                 <td>
                     <progress id="avancement" max="100" value="50">25%</progress>
                     @*<span id="pourcentage"></span>
@@ -37,10 +38,12 @@
                 </td>
                 <td></td>
                 <td></td>  
-                <td>@_File.FileName</td> 
-                <td><a href="~/Views/Home/Monitor.cshtml">@_File.FileName</a></td>             
+                <td>@*_File.FileName*@</td> 
+                <td><a href="~/Views/Home/Monitor.cshtml">@*_File.FileName*@</a></td>             -->
             </tr>
         }
     </table>
-
+</div>
+<div>
+    @Html.Partial("_BundleConversion", new x265Com.Models.ConversionModel())
 </div>

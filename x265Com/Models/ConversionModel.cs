@@ -20,12 +20,14 @@ namespace x265Com.Models
         public int perfOption { get; set; }
         public int CTU { get; set; }
         //public enum conteneur { mov, mxf, mp4 }
-        public int Conteneur { get; set; }
+        //public int Conteneur { get; set; }
         //public enum videoCodec { HEVC, h264, vp9 }
         public int VideoCodec { get; set; }
         public int debitVideo { get; set; }
         public int tailleGop { get; set; }
+        public int quantizerParameter { get; set; }
         public bool isQP { get; set; }
+        public bool isLossless { get; set; }
         //public enum audioCodec { mp3, wmv, pcm, aac }
         public int AudioCodec { get; set; }
         public int debitAudio { get; set; }
