@@ -10,9 +10,10 @@ function avancement() {
     var ava = document.getElementById("avancement");
     var prc = document.getElementById("pourcentage");
     prc.innerHTML = ava.value + "%";
+
 }
 
-avancement(); //Initialisation
+avancement(); //Initialisation 
 
 // code juste copié à adapter à la balise //
 //$(document).ready(function() {

@@ -29,13 +29,13 @@
                 <ul class="nav navbar-nav">  
                     
                     <li>@Html.ActionLink("Watch Folder", "Index", "WatchFolder", new { area = "" }, new { @class = "navbar-brand" }) </li>                 
-                    <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
+                    @*<li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>*@
                     <li>@Html.ActionLink("À Propos", "About", "Home")</li>
                 </ul>
-                <li><img src="/Content/Logo_inaRR.jpg" alt="logo-ina" style="width:50px;height:50px;border:0;margin-right:auto" /></li> 
-                <div class="nav navbar-nav navbar-right">
-                    
-                </div>
+                <img src="/Content/Logo_inaRR.jpg" alt="logo-ina" style="width:50px;height:50px;border:0;margin-right:auto" />
+               <!-- <div class="nav navbar-nav navbar-right">-->
+                    @Html.Partial("_LoginPartial");
+               <!-- </div>-->
             </div>
         </div>
     </div>

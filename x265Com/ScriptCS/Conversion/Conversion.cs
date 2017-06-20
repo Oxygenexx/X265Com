@@ -6,7 +6,7 @@ namespace x265Com.ScriptCS
 {
     #region Enums
     public enum defImageEnum { UHD_3840x2160, HD_1920x1080, HD_1440x1080, HD_1270x720, Proxy_480p, Proxy_360p, Proxy_240p }
-    public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo }
+    public enum perfOptionEnum { ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo, aucun}
     public enum CTUEnum { c64, c32, c16, c8 }
     //public enum conteneur { mov, mxf, mp4 }
     public enum videoCodecEnum { HEVC, h264, Mpeg2, vp9 }
@@ -70,9 +70,9 @@ namespace x265Com.ScriptCS
             _CMDConversionStr = BuildConversionString();
             if (string.IsNullOrEmpty(_CMDConversionStr))
                 return _isSuccess;
-
+            LaunchCMDCommandTest();
             DateTime _Begin = DateTime.Now;
-            _exitCode = LaunchCMDCommand(_CMDConversionStr);
+           // _exitCode = LaunchCMDCommand(_CMDConversionStr);
             _Elapsed = DateTime.Now - _Begin;
 
             if (_exitCode == 0)
@@ -86,24 +86,18 @@ namespace x265Com.ScriptCS
         /// <returns></returns>
         public string BuildConversionString()
         {
-            //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi            
-            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 -i " + InFilePath + @"\" + InFileName + " ");
+            //Example Line : ffmpeg -i input.avi -b:v 64k -bufsize 64k output.avi    
+            //"ffmpeg -thread_queue_size 32 -vsync passthrough -frame_drop_threshold 4 -i "        
+            StringBuilder _cmdStringBuilder = new StringBuilder("ffmpeg -thread_queue_size 32 -frame_drop_threshold 4 -i " + InFilePath + @"\" + InFileName + " ");
+
             _cmdStringBuilder.Append(getCadenceImage());
             _cmdStringBuilder.Append(getResolutionCommandString());
             _cmdStringBuilder.Append(getVideoCodec());
-            _cmdStringBuilder.Append(getQP());
+            _cmdStringBuilder.Append(getLibParams());
             _cmdStringBuilder.Append(getDebitVideo());
             _cmdStringBuilder.Append(getAudioCodec());
             _cmdStringBuilder.Append(getDebitAudio());
-            //_cmdStringBuilder.Append(getCTU());
-            //if (isWpp)
-            //{
-            //    _cmdStringBuilder.Append("-wpp:1 ");
-            //}
-            //else
-            //{
-            //    _cmdStringBuilder.Append("-no-wpp:0 ");
-            //}
+            _cmdStringBuilder.Append(getGOP());
             _cmdStringBuilder.Append(getPresetCommandString());
 
             _cmdStringBuilder.Append(" -y " + OutFilePath + @"\" + OutFileName);
@@ -119,18 +113,49 @@ namespace x265Com.ScriptCS
         public int LaunchCMDCommand(string _cmdstring)
         {
 
-            _cmdstring = "/C " + _cmdstring;
+            _cmdstring = "/c " + _cmdstring;
             Process _process = new Process();
             //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            _process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             _process.StartInfo.FileName = "cmd.exe";
             _process.StartInfo.Arguments = _cmdstring;
-            _process.StartInfo.UseShellExecute = false;
+            _process.StartInfo.UseShellExecute = true;
             _process.StartInfo.RedirectStandardOutput = true;
             _process.StartInfo.RedirectStandardError = true;
             _process.StartInfo.Verb = "runas";
             logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
             System.IO.File.AppendAllText(logErrorPath, _cmdstring + "\n");
+            //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
+            _process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
+            //process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
+            _process.Start();
+            _process.BeginErrorReadLine();
+            //process.BeginOutputReadLine();
+            string output = _process.StandardOutput.ReadToEnd();
+            //Console.WriteLine(output);
+            string _LogPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleLog);
+            //File.AppendAllText(_LogPath, appendText);
+            if (!string.IsNullOrEmpty(output))
+                System.IO.File.WriteAllText(_LogPath, output);
+            //Tools.WriteErrorInXml(output);
+            _process.WaitForExit();
+            return _process.ExitCode;
+        }
+        public int LaunchCMDCommandTest()
+        {
+
+            
+            Process _process = new Process();
+            //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            _process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            _process.StartInfo.FileName = "cmd.exe";
+            _process.StartInfo.Arguments = "/c ffmpeg";
+            _process.StartInfo.UseShellExecute = false;
+            _process.StartInfo.RedirectStandardOutput = true;
+            _process.StartInfo.RedirectStandardError = true;
+            _process.StartInfo.Verb = "runas";
+            logErrorPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputErrorLog);
+            //System.IO.File.AppendAllText(logErrorPath, _cmdstring + "\n");
             //logDataPath = Tools.GetLogFilePathAndName(LogFileType.ConsoleOutputDataLog);
             _process.ErrorDataReceived += new DataReceivedEventHandler(OutputErrorHandler);
             //process.OutputDataReceived += new DataReceivedEventHandler(OutputDataHandler);
@@ -293,26 +318,68 @@ namespace x265Com.ScriptCS
             {
                 case CTUEnum.c64:
                     {
-                        _CTU = "-CTU=64 ";
+                        _CTU = "ctu=64:";
                         break;
                     }
                 case CTUEnum.c32:
                     {
-                        _CTU = "-CTU=32 ";
+                        _CTU = "ctu=32:";
                         break;
                     }
                 case CTUEnum.c16:
                     {
-                        _CTU = "-CTU=16 ";
+                        _CTU = "ctu=16:";
                         break;
                     }
                 case CTUEnum.c8:
                     {
-                        _CTU = "-CTU=8 ";
+                        _CTU = "ctu=8:";
                         break;
                     }
             }
             return _CTU;
+        }
+
+        public string getLibParams()
+        {
+            string _libParams = "";
+            bool ParamLib = false;
+
+            if (VideoCodec == videoCodecEnum.h264)
+            {
+                _libParams = "-x264-params ";
+                ParamLib = true;
+            }
+            else
+            {
+                if (VideoCodec == videoCodecEnum.HEVC)
+                {
+                    _libParams = "-x265-params ";
+                    ParamLib = true;
+                    
+                }
+            }
+            if(ParamLib)
+            {
+                _libParams += getQP();
+                _libParams += getCTU();
+                _libParams += getWPP();
+            }
+
+            return _libParams;
+        }
+        public string getWPP()
+        {
+            return "wpp=" + (isWpp ? 1 : 0) + " ";
+        }
+
+        public string getGOP()
+        {
+            if(tailleGop < 1)
+            {
+                tailleGop = 1;
+            }
+            return "-g " + tailleGop + " ";
         }
 
         public string getQP()
@@ -331,17 +398,7 @@ namespace x265Com.ScriptCS
                         quantizerParameter = 0;
                     }
                 }
-                if (VideoCodec == videoCodecEnum.h264)
-                {
-                    _QP = "-x264-params qp=" + quantizerParameter + " ";
-                }
-                else
-                {
-                    if (VideoCodec == videoCodecEnum.HEVC)
-                    {
-                        _QP = "-x265-params qp=" + quantizerParameter + " ";
-                    }
-                }
+                _QP = "qp="+quantizerParameter + ":";
             }
 
             return _QP;
@@ -349,7 +406,11 @@ namespace x265Com.ScriptCS
 
         public string getPresetCommandString()
         {
-            string _presetCMDLine = "-preset " + perfOption.ToString() + " ";
+            string _presetCMDLine = "";
+            if (perfOption != perfOptionEnum.aucun)
+            {
+                _presetCMDLine = "-preset " + perfOption.ToString() + " ";
+            }           
             return _presetCMDLine;
         }
 

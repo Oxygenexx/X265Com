@@ -2,6 +2,7 @@
 @using Microsoft.Owin.Security
 @{
     ViewBag.Title = "Gérer vos connexions externes";
+    //http://go.microsoft.com/fwlink/?LinkId=313242
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -11,10 +12,10 @@
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0) {
         <div>
-            <p>
-                Il n'existe aucun service d'authentification externe configuré. Consultez <a href="http://go.microsoft.com/fwlink/?LinkId=313242">cet article</a>
+            @*<p>
+                Il n'existe aucun service d'authentification externe configuré. Consultez <a href="">cet article</a>
               pour des détails sur la configuration de cette application ASP.NET en vue de la prise en charge de la connexion via des services externes.
-            </p>
+            </p>*@
         </div>
     }
     else

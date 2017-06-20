@@ -40,8 +40,10 @@
                 <input type="button" name="AddFile" value="Supprimer Fichier" class="button margin" onclick="RemoveFile">
             </p>-->
         </div>
-        <h3>Vidéo</h3> <br />
+      
 
+        <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages vidéos">Vidéo</h3> <br />
+            
             <p class="colonne1">
                 <label>
                     Definition Image
@@ -104,7 +106,8 @@
                 <output name="result4"></output>
                 <br />
             </p>
-            <h3>Audio</h3> <br />
+
+            <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section réglages audios">Audio</h3> <br />
                 <p class="colonne1">
                     <label>
                         Audio Codec
@@ -123,7 +126,8 @@
                     <input type="text" class="text margin debitAudio" name="debitAudio" id="debitAudio" oninput="result4.value=parseInt(d.value)">
                     <output name="result4"></output>
                 </p>
-                <h3>Paramètres de l'encodeur</h3> <br />
+
+                <h3 href="#" data-toggle="tooltip" title="Vous entrez dans la section des paramètres techniques d'encodage">Paramètres de l'encodeur</h3> <br />
                 <p class="colonne1">
                     <label>
                         Performance Option
@@ -133,13 +137,14 @@
                         <option value="1" @(Model.perfOption == 1 ? "selected" : "")>superfast</option>
                         <option value="2" @(Model.perfOption == 2 ? "selected" : "")>veryfast</option>
                         <option value="3" @(Model.perfOption == 3 ? "selected" : "")>faster</option>
-                        <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>
-                        <option disabled>-----------</option>
+                        <option value="4" @(Model.perfOption == 4 ? "selected" : "")>fast</option>                        
                         <option value="5" @(Model.perfOption == 5 ? "selected" : "")>medium</option>
                         <option value="6" @(Model.perfOption == 6 ? "selected" : "")>slow</option>
                         <option value="7" @(Model.perfOption == 7 ? "selected" : "")>slower</option>
                         <option value="8" @(Model.perfOption == 8 ? "selected" : "")>veryslow</option>
                         <option value="9" @(Model.perfOption == 9 ? "selected" : "")>placebo</option>
+                        <option disabled>-----------</option>
+                        <option value="9" @(Model.perfOption == 10 ? "selected" : "")>aucun</option>
                     </select>
 
                     @*<div class="dropdown">
@@ -159,11 +164,8 @@
                     <label>
                         Taille GOP
                     </label>
-                    <select class="margin bottom tailleGop" name="tailleGop" id="tailleGop">
-                        <option value="0" @(Model.tailleGop == 0 ? "selected" : "")>1 image</option>
-                        <option value="1" @(Model.tailleGop == 1 ? "selected" : "")>12 images</option>
-                        <option value="2" @(Model.tailleGop == 2 ? "selected" : "")>15 images</option>
-                    </select>
+                    <input type="text"class="margin bottom tailleGop" name="tailleGop" id="tailleGop"/>
+                        
 
 
                     <label>
@@ -177,32 +179,59 @@
                     </select>
                     <br />
 
-                    <label>
+                    <label href="#" data-toggle="tooltip" title="Valeur comprise entre 1 et 51">
                         Quantizer Parameter
                     </label>
                     <input type="text" class="text margin debitAudio" name="quantizerParameter" id="quantizerParameter" oninput="result4.value=parseInt(d.value)">
                     <output name="result4"></output>
+                        <label href="#" data-toggle="tooltip" title="Accelerate video encoding speed when enabled if multi thread is supported by the CPU">
+                            Activer le Wpp
+                        </label>
+                        <input type="checkbox" name="isWpp" id="Wppcbox" class="margin wpp">
 
-                    <label>
-                        Activer le Wpp
-                    </label>
-                    <input type="checkbox" name="isWpp" id="Wppcbox" value="Wpp" class="margin wpp">
+                        <label>
+                            Activer le Qp
+                        </label>
+                        <input type="checkbox" name="isQP" id="QPcbox" class="margin qp">
 
-                    <label>
-                        Activer le Qp
-                    </label>
-                    <input type="checkbox" name="isQP" id="QPcbox" value="Qp" class="margin qp">
+                        <label href="#" data-toggle="tooltip" title="Salut">
+                            Activer le lossless
+                        </label>
+                        <input type="checkbox" name="isLossless" id="Losslesscbox" value="Lossless" class="margin wpp">
+                        <br />
+</p>
 
-                    <label>
-                        Activer le lossless
-                    </label>
-                    <input type="checkbox" name="isLossless" id="Losslesscbox" value="Lossless" class="margin wpp">
-                    <br />
-                </p>
-
-                <input type="submit" name="BeginConversionButton" value="Conversion" class="button margin">
+                <input type="submit" name="BeginConversionButton" value="Conversion">
                 @*<p><button type="button" onclick="DoSomething" class="btn btn-primary btn-lg">Begin Conversion &raquo;</button></p>
                     </div>*@
+
+                @*<!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">La conversion a commencé</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Salut</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--ToolTip quand mouseOver-->
+        <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+        </script>*@
 
     }
 
