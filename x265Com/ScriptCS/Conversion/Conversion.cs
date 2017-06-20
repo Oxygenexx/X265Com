@@ -36,6 +36,7 @@ namespace x265Com.ScriptCS
         public bool isWpp { get; set; }
 
         #region Exe
+        public bool FirstFPS { get; set; }
         public string logErrorPath { get; set; }
         public string logDataPath { get; set; }
         #endregion
